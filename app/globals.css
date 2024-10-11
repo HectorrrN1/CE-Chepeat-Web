@@ -40,3 +40,15 @@ a {
     color-scheme: dark;
   }
 }
+button {
+  background-color: #ff3b30;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #e02c20;
+}

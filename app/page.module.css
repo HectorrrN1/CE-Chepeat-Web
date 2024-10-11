@@ -66,3 +66,68 @@
   color: red;
   margin-bottom: 10px;
 }
+
+
+
+
+
+
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.mapSection {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.discountSection {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.discountBanner {
+  background-color: #ffcccc;
+  padding: 20px;
+  text-align: center;
+}
+
+.productGrid {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.productCard {
+  width: 30%;
+  text-align: center;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.productCard img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.button {
+  background-color: #ff3b30;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #e32e25;
+}

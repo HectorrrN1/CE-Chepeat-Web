@@ -1,0 +1,31 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .menuButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+  }
+  
+  .menu {
+    display: none;
+    flex-direction: column;
+  }
+  
+  .showMenu {
+    display: flex;
+  }
+  
+  .brand {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  .logo img {
+    width: 120px;
+    margin-bottom: 20px;
+  }
