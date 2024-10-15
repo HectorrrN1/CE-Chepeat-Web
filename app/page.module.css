@@ -33,8 +33,15 @@
 .inputField {
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #ffffff; /* Bordes blancos */
   border-radius: 5px;
+  background-color: #fff; /* Fondo blanco */
+  color: #000; /* Texto negro */
+}
+
+.inputField:focus {
+  border-color: #ffffff; /* Mantener los bordes blancos al hacer foco */
+  outline: none; /* Eliminar el contorno predeterminado */
 }
 
 .forgotPassword {
