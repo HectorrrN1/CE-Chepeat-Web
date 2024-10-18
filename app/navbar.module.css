@@ -5,6 +5,11 @@
     background-color: #fff;
     border-bottom: 1px solid #ddd;
   }
+   
+  .logo img {
+    width: 120px;
+    margin-bottom: 20px;
+  }
   
   .menuButton {
     background: none;
@@ -25,7 +30,4 @@
     font-size: 1.2rem;
     font-weight: bold;
   }
-  .logo img {
-    width: 120px;
-    margin-bottom: 20px;
-  }
+ 
