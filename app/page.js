@@ -1,12 +1,67 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Importa useRouter de next/navigation
 import Footer from './Footer';
 import styles from './page.module.css';
 
 export default function LoginPage() {
   const router = useRouter(); // Hook para navegación
+
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [errors, setErrors] = useState({ email: '', password: '' });
+
+  // Validación del correo electrónico
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Manejar el envío del formulario
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let formIsValid = true;
+    const newErrors = { email: '', password: '' };
+
+    // Validar correo
+    if (!validateEmail(formData.email)) {
+      newErrors.email = 'Por favor, introduce un correo electrónico válido';
+      formIsValid = false;
+    }
+
+    // Validar contraseña
+    if (formData.password.length < 6) {
+      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
+      formIsValid = false;
+    }
+
+    setErrors(newErrors);
+
+    if (formIsValid) {
+      // Aquí puedes manejar el proceso de inicio de sesión
+      console.log('Formulario válido, proceder a la autenticación');
+    }
+  };
+
+  // Manejar cambios en los campos del formulario
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    // Validar al salir del campo (blur)
+    const { name, value } = e.target;
+    let errorMessage = '';
+
+    if (name === 'email' && !validateEmail(value)) {
+      errorMessage = 'Por favor, introduce un correo electrónico válido';
+    }
+
+    if (name === 'password' && value.length < 6) {
+      errorMessage = 'La contraseña debe tener al menos 6 caracteres';
+    }
+
+    setErrors({ ...errors, [name]: errorMessage });
+  };
 
   const handleCreateAccount = () => {
     router.push('/pageRegClie'); // Redirige a la vista de registro
@@ -20,19 +75,32 @@ export default function LoginPage() {
       <h1>Bienvenido a Cheapeat</h1><br />
       <p>Por favor, inicia sesión para continuar.</p>
       <br />
-      <form className={styles.loginForm}>
+
+      <form className={styles.loginForm} onSubmit={handleSubmit}>
+        {/* Campo de correo electrónico */}
         <input
           type="email"
+          name="email"
           placeholder="Correo Electrónico"
           required
           className={styles.inputField}
+          value={formData.email}
+          onChange={handleChange}
         />
+        {errors.email && <p>{errors.email}</p>}
+
+        {/* Campo de contraseña */}
         <input
           type="password"
+          name="password"
           placeholder="Contraseña"
           required
           className={styles.inputField}
+          value={formData.password}
+          onChange={handleChange}
         />
+        {errors.password && <p>{errors.password}</p>}
+
         <a href="#" className={styles.forgotPassword}>¿Olvidaste tu contraseña?</a>
         <button type="submit" className={styles.loginButton}>Ingresar</button>
       </form>
