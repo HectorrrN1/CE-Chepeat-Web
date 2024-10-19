@@ -13,7 +13,10 @@ const Sidebar = ({ username }) => {
     <div className={isOpen ? styles.sidebarOpen : styles.sidebarClosed}>
       <div className={styles.header}>
         <button className={styles.toggleButton} onClick={toggleSidebar}>
-          {isOpen ? 'Cerrar' : 'Abrir'}
+        <div className={styles.menuIcon}>
+        <span>&#9776;</span>
+      </div>
+
         </button>
       </div>
       <div className={styles.profileSection}>
@@ -45,4 +48,4 @@ const Sidebar = ({ username }) => {
   );
 };
 
-export default Sidebar;
+export default Sidebar; 

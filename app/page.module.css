@@ -321,3 +321,17 @@
   display: flex;
   justify-content: center;
 }
+
+
+
+/* page.module.css carrusel  */
+.carouselSection {
+  margin-top: 40px;
+}
+
+.carouselSection h2 {
+  font-size: 28px;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}

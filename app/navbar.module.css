@@ -1,33 +1,30 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-  }
-   
-  .logo img {
-    width: 120px;
-    margin-bottom: 20px;
-  }
-  
-  .menuButton {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-  }
-  
-  .menu {
-    display: none;
-    flex-direction: column;
-  }
-  
-  .showMenu {
-    display: flex;
-  }
-  
-  .brand {
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
- 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 10px;
+  color: white;
+}
+
+.menuIcon {
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.searchContainer {
+  flex-grow: 1;
+  margin: 0 20px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+}
+
+.gridIcon {
+  cursor: pointer;
+  font-size: 24px;
+}
