@@ -35,7 +35,7 @@
   }
   
   .star.active {
-    color: #ff3b30;
+    color: #FF9800;
   }
   
   .textarea {
@@ -52,7 +52,7 @@
   .button {
     width: 100%;
     padding: 10px;
-    background-color: #ff3b30;
+    background-color: #FF9800;
     color: #fff;
     border: none;
     border-radius: 4px;

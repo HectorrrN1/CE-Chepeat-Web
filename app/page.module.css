@@ -120,7 +120,7 @@
 }
 
 .button {
-  background-color: #ff3b30;
+  background-color: #FF9800;
   color: white;
   padding: 10px;
   border: none;
@@ -129,7 +129,7 @@
 }
 
 .button:hover {
-  background-color: #e32e25;
+  background-color: #FF9800;
 }
 
 
