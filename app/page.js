@@ -39,8 +39,9 @@ export default function LoginPage() {
     setErrors(newErrors);
 
     if (formIsValid) {
-      // Aquí puedes manejar el proceso de inicio de sesión
-      console.log('Formulario válido, proceder a la autenticación');
+      // Redirigir a la página home si el formulario es válido
+      console.log('Formulario válido, redirigiendo a home...');
+      router.push('/home'); // Redirige a la página home
     }
   };
 
