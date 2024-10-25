@@ -78,7 +78,7 @@ export default function LoginPage() {
     if (noErrors) {
       try {
         // Realizar la solicitud POST usando Axios
-        const response = await axios.post('https://backend-j959.onrender.com/api/Auth/RegistroUsuario', {
+        const response = await axios.post('https://backend-j959.onrender.com/api/Auth/RegistrarUsuario', {
           fullname: formData.nombre,
           email: formData.email,
           password: formData.password,
