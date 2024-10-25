@@ -1,12 +1,24 @@
+
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './Sidebar.module.css';
 import { UserOutlined, EditOutlined, LogoutOutlined, ShopOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 const Sidebar = ({ username }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const router = useRouter();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    // Elimina el token y otros datos de sesión del almacenamiento local
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+
+    // Redirige al usuario a la página de inicio de sesión
+    router.push('/');
   };
 
   return (
@@ -37,7 +49,7 @@ const Sidebar = ({ username }) => {
           <ShopOutlined className={styles.icon} />
           {isOpen && <span>Modo Vendedor</span>}
         </li>
-        <li className={styles.menuItem}>
+        <li className={styles.menuItem} onClick={handleLogout}>
           <LogoutOutlined className={styles.icon} />
           {isOpen && <span>Cerrar Sesión</span>}
         </li>
