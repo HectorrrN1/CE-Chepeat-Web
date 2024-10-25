@@ -1,9 +1,13 @@
 'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Importar useRouter
+import axios from 'axios'; // Importar Axios
 import Footer from '../Footer';
 import './pageCli.css'; // Importación de CSS
 
 export default function LoginPage() {
+  const router = useRouter(); // Crear instancia del router
+
   // Estados para manejar los valores de los campos y errores
   const [formData, setFormData] = useState({
     nombre: '',
@@ -44,12 +48,6 @@ export default function LoginPage() {
       newErrors.email = '';
     }
 
-    if (field === 'direccion' && formData.direccion.trim() === '') {
-      newErrors.direccion = 'La dirección es obligatoria';
-    } else {
-      newErrors.direccion = '';
-    }
-
     if (field === 'password' && formData.password.length < 6) {
       newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
     } else {
@@ -71,11 +69,30 @@ export default function LoginPage() {
   };
 
   // Función para manejar el envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Puedes realizar validaciones adicionales antes de enviar el formulario si es necesario
-    // En este caso, el formulario se valida campo por campo.
+    // Validaciones adicionales
+    const noErrors = Object.values(errors).every((error) => error === '');
+
+    if (noErrors) {
+      try {
+        // Realizar la solicitud POST usando Axios
+        const response = await axios.post('https://backend-j959.onrender.com/api/Auth/RegistroUsuario', {
+          fullname: formData.nombre,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        });
+
+        if (response.status === 200) {
+          // Redirigir a la página de vendedorPages si el registro es exitoso
+          router.push('/vendedorPages');
+        }
+      } catch (error) {
+        console.error('Error al registrar el usuario:', error);
+      }
+    }
   };
 
   return (
@@ -109,17 +126,6 @@ export default function LoginPage() {
           onBlur={() => handleBlur('email')}
         />
         {errors.email && <p className="errorText">{errors.email}</p>}
-
-        <input
-          type="text"
-          name="direccion"
-          placeholder="Dirección"
-          className="inputField"
-          value={formData.direccion}
-          onChange={handleChange}
-          onBlur={() => handleBlur('direccion')}
-        />
-        {errors.direccion && <p className="errorText">{errors.direccion}</p>}
 
         <input
           type="password"
