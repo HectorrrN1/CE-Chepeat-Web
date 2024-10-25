@@ -1,27 +1,25 @@
 import React, { useState } from 'react';
-import styles from './Sidebar.module.css'; // Importa los estilos
+import styles from './Sidebar.module.css';
 import { UserOutlined, EditOutlined, LogoutOutlined, ShopOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 const Sidebar = ({ username }) => {
-  const [isOpen, setIsOpen] = useState(true); // Estado para controlar si el sidebar está abierto
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen); // Cambia el estado para abrir/cerrar el sidebar
+    setIsOpen(!isOpen);
   };
 
   return (
     <div className={isOpen ? styles.sidebarOpen : styles.sidebarClosed}>
       <div className={styles.header}>
         <button className={styles.toggleButton} onClick={toggleSidebar}>
-        <div className={styles.menuIcon}>
-        <span>&#9776;</span>
-      </div>
-
+          <div className={styles.menuIcon}>
+            <span>&#9776;</span>
+          </div>
         </button>
       </div>
       <div className={styles.profileSection}>
         <div className={styles.profilePic}>
-          {/* Imagen de perfil */}
           <img src="/imagenes/perfil1.png" alt="Profile" />
         </div>
         <h3 className={styles.username}>{username}</h3>
@@ -48,4 +46,4 @@ const Sidebar = ({ username }) => {
   );
 };
 
-export default Sidebar; 
+export default Sidebar;
