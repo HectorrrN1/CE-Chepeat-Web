@@ -1,53 +1,41 @@
+// RealTimeMap.js
+"use client";
 import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic'; // Para carga dinámica solo en el cliente
-import 'leaflet/dist/leaflet.css';
-import styles from './RealTimeMap.module.css';
-
-// Carga el componente MapContainer dinámicamente solo en el lado del cliente
-const MapContainer = dynamic(
-  () => import('react-leaflet').then(mod => mod.MapContainer),
-  { ssr: false } // Desactiva SSR
-);
-
-const TileLayer = dynamic(
-  () => import('react-leaflet').then(mod => mod.TileLayer),
-  { ssr: false }
-);
-
-const Marker = dynamic(
-  () => import('react-leaflet').then(mod => mod.Marker),
-  { ssr: false }
-);
-
-const Popup = dynamic(
-  () => import('react-leaflet').then(mod => mod.Popup),
-  { ssr: false }
-);
 
 const RealTimeMap = () => {
-  const [mounted, setMounted] = useState(false);
+  const [position, setPosition] = useState(null);
 
   useEffect(() => {
-    setMounted(true); // Para asegurar que solo se ejecute en el cliente
+    if (navigator.geolocation) {
+      const watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          setPosition({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          });
+        },
+        (error) => console.error("Error al obtener la ubicación:", error),
+        { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
+      );
+
+      return () => navigator.geolocation.clearWatch(watchId); // Limpia el watcher al desmontar el componente
+    } else {
+      console.error("La geolocalización no está soportada en este navegador.");
+    }
   }, []);
 
-  if (!mounted) {
-    return null; // No renderiza nada en el servidor
-  }
-
   return (
-    <div className={styles.mapContainer}>
-      <MapContainer center={[51.505, -0.09]} zoom={13} className={styles.leafletContainer}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Marker position={[51.505, -0.09]}>
-          <Popup>
-            Estás aquí.
-          </Popup>
-        </Marker>
-      </MapContainer>
+    <div style={{ width: '100%', height: '300px' }}>
+      {position ? (
+        <iframe
+          src={`https://www.google.com/maps?q=${position.lat},${position.lng}&z=15&output=embed`}
+          style={{ width: '100%', height: '100%', border: 0 }}
+          allowFullScreen
+          loading="lazy"
+        ></iframe>
+      ) : (
+        <p>Cargando ubicación en tiempo real...</p>
+      )}
     </div>
   );
 };

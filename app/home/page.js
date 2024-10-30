@@ -1,4 +1,4 @@
-
+// Page.js
 "use client";
 
 import React, { useState } from 'react';
@@ -7,12 +7,12 @@ import Footer from '../Footer';
 import styles from '../page.module.css';
 import '../globals.css';
 import Sidebar from '../Sidebar'; 
-import { useRouter } from 'next/navigation';  // Importa useRouter
-import RealTimeMap from '../RealTimeMap'; // Asegúrate de ajustar la ruta correctamente
+import { useRouter } from 'next/navigation';  
+import RealTimeMap from '../RealTimeMap'; 
 
 const Page = () => {
   const [showModal, setShowModal] = useState(true);
-  const router = useRouter(); // Inicializa useRouter
+  const router = useRouter();
 
   const handleLocationPermission = () => {
     if (navigator.geolocation) {
@@ -32,15 +32,12 @@ const Page = () => {
     }
   };
 
-  // Función para manejar el click del botón "Ver más"
   const handleSeeMore = () => {
-    // Redirige a la página de detalles del producto
-    router.push(`/product`);  // Navega a /product donde tienes tu vista detallada
+    router.push(`/product`);
   };
 
   return (
     <div className={styles.pageContainer}>
-      {/* Modal de solicitud de ubicación */}
       {showModal && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
@@ -64,10 +61,9 @@ const Page = () => {
         <Sidebar username="Juan Pérez" />
 
         <div className={styles.content}>
-          {/* Aquí agregamos el mapa en tiempo real */}
           <div className={styles.mapSection}>
-            <h2>Mapa en tiempo real</h2>
-            <RealTimeMap />  {/* Aquí se inserta el mapa en tiempo real */}
+           
+            <RealTimeMap /> {/* Componente del mapa en tiempo real */}
           </div>
 
           <div className={styles.discountSection}>
@@ -82,7 +78,6 @@ const Page = () => {
               <img src="/imagenes/pasta.jpg" alt="Pasta Italiana" />
               <h3>Pasta Italiana</h3>
               <p>$12.99</p>
-              {/* Aquí redirige a la página de detalles */}
               <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
             </div>
             <div className={styles.productCard}>
