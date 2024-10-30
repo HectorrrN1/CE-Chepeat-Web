@@ -100,19 +100,26 @@
 
 .productGrid {
   display: flex;
+  flex-wrap: wrap; /* Permite que los elementos se ajusten automáticamente a nuevas filas */
   justify-content: space-around;
   width: 100%;
   margin-bottom: 40px;
+  gap: 20px; /* Espacio entre las tarjetas de productos */
 }
 
 .productCard {
-  width: 30%;
+  width: 30%; /* Ocupa el 30% del ancho del contenedor */
   text-align: center;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   padding: 20px;
   border-radius: 8px;
 }
+
+.nueva-fila {
+  flex-basis: 100%; /* Fuerza a los elementos con esta clase a ocupar toda la fila y bajar */
+}
+
 
 .productCard img {
   max-width: 100%;

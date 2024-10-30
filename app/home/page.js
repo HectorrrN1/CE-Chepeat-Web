@@ -92,6 +92,29 @@ const Page = () => {
               <p>$50.00</p>
               <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
             </div>
+
+            <div className={styles.productCard}>
+              <img src="/imagenes/tacos.jpg" alt="Tacos al pastor" />
+              <h3>4 Tacos al pastor</h3>
+              <p>$30.00</p>
+              <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
+            </div>
+
+            <div className={styles.productCard}>
+              <img src="/imagenes/tarta.avif" alt="Tarta de Frutas" />
+              <h3>Tarta de Frutas</h3>
+              <p>$15.00</p>
+              <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
+            </div>
+            <div className={styles.productCard}>
+              <img src="/imagenes/croissant.jpg" alt="Croissant de Mantequilla" />
+              <h3>Croissant de Mantequilla</h3>
+              <p>$2.99</p>
+              <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
+            </div>
+
+
+            
           </div>
         </div>
       </div>
