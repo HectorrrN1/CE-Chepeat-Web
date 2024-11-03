@@ -5,7 +5,7 @@ name: CI-Chepeat
 trigger:
   branches:
     include:
-      - development
+      - main
 
 # Jobs del pipeline
 jobs:
