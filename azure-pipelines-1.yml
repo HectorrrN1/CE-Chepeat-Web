@@ -1,0 +1,51 @@
+# Archivo azure-pipelines.yml para la rama Sprint-6
+
+trigger:
+  branches:
+    include:
+      - Sprint-6  # Configura el trigger solo para la rama 'Sprint-6'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# Paso para instalar dependencias
+- script: |
+    echo "Instalando dependencias..."
+    npm install
+  displayName: 'Instalar dependencias'
+
+# Paso para ejecutar el linter (opcional, solo si tu proyecto usa un linter)
+- script: |
+    echo "Ejecutando linter..."
+    npm run lint
+  displayName: 'Ejecutar linter'
+
+# Paso para construir la aplicación
+- script: |
+    echo "Construyendo la aplicación..."
+    npm run build
+  displayName: 'Construir aplicación'
+
+# Paso para ejecutar pruebas
+- script: |
+    echo "Ejecutando pruebas..."
+    npm test
+  displayName: 'Ejecutar pruebas'
+
+# Notificar en caso de errores
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/test-results.xml' # Ajusta según el formato de salida de tus pruebas
+  condition: failed() # Publica resultados solo si el build falla
+  displayName: 'Publicar resultados de pruebas'
+
+# Enviar notificación (usando un webhook como alternativa)
+- script: |
+    echo "Enviando notificación de fallo a un webhook..."
+    curl -X POST -H 'Content-Type: application/json' \
+    -d '{"text": "El pipeline de la rama Sprint-6 ha fallado. Revisa los detalles para más información."}' \
+    https://tu_webhook_url_aqui
+  condition: failed()  # Envía solo si el build falla
+  displayName: 'Enviar notificación de fallo'
