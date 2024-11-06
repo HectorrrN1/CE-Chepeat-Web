@@ -1,0 +1,182 @@
+/* Estructura general de la página */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.mainLayout {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #001529;
+  color: white;
+  height: 100vh; /* Sidebar ocupa toda la altura */
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 60px; /* Ajuste si hay un Navbar fijo */
+  transition: width 0.3s ease-in-out;
+}
+
+/* Ajuste del sidebar para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80px; /* Cambia el ancho del sidebar en pantallas pequeñas */
+  }
+}
+
+.content {
+  margin-left: 250px; /* Espacio para el sidebar */
+  padding: 20px;
+  flex-grow: 1;
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 768px) {
+  .content {
+    margin-left: 80px;
+  }
+}
+
+/* Sección del mapa en tiempo real */
+.mapSection {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Sección de descuentos */
+.discountSection {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.discountBanner {
+  background-color: #ffcccc;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 18px;
+}
+
+/* Grid de productos */
+.productGrid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap; /* Permite que las tarjetas se ajusten en pantallas pequeñas */
+  width: 100%;
+  margin-bottom: 40px;
+  gap: 20px; /* Espaciado entre las tarjetas de productos */
+}
+
+.productCard {
+  width: 30%;
+  text-align: center;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.productCard:hover {
+  transform: translateY(-5px); /* Añade una ligera animación al pasar el mouse */
+}
+
+.productCard img {
+  max-width: 100%;
+  border-radius: 8px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .productCard {
+    width: 45%; /* Ajusta las tarjetas en pantallas pequeñas */
+  }
+}
+
+@media (max-width: 480px) {
+  .productCard {
+    width: 100%; /* Tarjetas ocupan todo el ancho en pantallas muy pequeñas */
+  }
+}
+
+/* Botones */
+button {
+  background-color: #ff3b30;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #e32e25;
+}
+
+/* Modal de solicitud de ubicación */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 500px;
+  width: 90%; /* Asegura que se ajuste a pantallas pequeñas */
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.locationButton, .cancelButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.locationButton {
+  background-color: #28a745;
+  color: white;
+}
+
+.cancelButton {
+  background-color: #ff3b30;
+  color: white;
+}
+
+/* Espaciado adicional en el modal */
+h2, p {
+  margin-bottom: 15px;
+}
+
+/* Estilo del logo */
+.logo img {
+  width: 120px;
+  margin-bottom: 20px;
+}

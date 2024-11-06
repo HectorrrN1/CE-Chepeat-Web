@@ -1,126 +1,115 @@
-/* Contenedor principal */
-.container {
+/* Estructura general de la página */
+.pageContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Cambiar a flex-start para evitar que el contenido se centre verticalmente */
-  min-height: 100vh;
-  padding: 0; /* Remueve padding adicional del contenedor principal */
+  justify-content: flex-start;
+  padding: 20px;
   background-color: #f5f5f5;
   box-sizing: border-box;
 }
 
-/* Navbar (Barra de navegación) */
+/* Navbar */
 .navbar {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px; /* Ajusta el espacio alrededor del contenido del navbar */
-  background-color: #df1c24; /* Color de fondo rojo oscuro */
-  color: white; /* Texto en blanco */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
-  position: sticky; /* Mantener el navbar pegado al principio de la página */
-  top: 0; /* Siempre en la parte superior */
-  z-index: 100; /* Asegura que el navbar se mantenga visible sobre el contenido */
+  padding: 10px 20px; /* Espacio reducido */
+  background-color: #f83a00; /* Color naranja suave */
+  color: black;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Logo */
+.logo img {
+  width: 80px; /* Tamaño reducido del logo */
 }
 
 /* Título del navbar */
 .navbarTitle {
-  font-size: 24px;
+  font-size: 28px; /* Aumentado el tamaño del título */
   font-weight: bold;
+  color: #030100; /* Color de texto que complementa el naranja */
 }
 
-/* Botón del menú */
-.menuButton {
-  padding: 10px 20px;
-  background-color: #fff;
-  color: #df1c24; /* Color rojo oscuro para el texto del botón */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.menuButton:hover {
-  background-color: #f0f0f0; /* Color más claro al pasar el ratón */
-}
-
-/* Encabezado de la aplicación */
-.header {
-  font-size: 36px;
-  color: #df1c24;
-  text-align: center;
-  margin-bottom: 0; /* Cambiado a 0 para eliminar el espacio debajo del encabezado */
-  font-weight: bold;
-  text-transform: uppercase;
+/* Contenido principal */
+.content {
+  width: 100%;
+  max-width: 900px; /* Limita el ancho del contenido */
+  padding: 20px;
 }
 
 /* Título principal */
 .title {
   font-size: 28px;
-  margin-top: 10px; /* Ajusta el margen superior si es necesario */
-  margin-bottom: 20px;
-  color: #333;
+  margin: 20px 0;
+  color: #333; /* Color más suave */
   text-align: center;
 }
 
-/* Contenedor de la lista de productos */
-.productList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+/* Grid de productos */
+.productGrid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap; /* Permite que las tarjetas se ajusten en pantallas pequeñas */
   width: 100%;
-  max-width: 900px;
+  gap: 20px; /* Espaciado entre las tarjetas de productos */
 }
 
 /* Estilo de cada producto */
-.productItem {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 15px;
+.productCard {
+  width: 30%;
   text-align: center;
-  color: #333;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
 }
 
-.productItem:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+.productCard:hover {
+  transform: translateY(-5px); /* Añade una ligera animación al pasar el mouse */
 }
 
 /* Estilo para las imágenes de los productos */
 .productImage {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  margin-bottom: 10px;
-  border-radius: 5px;
+  max-width: 100%;
+  height: 150px; /* Altura fija para mantener uniformidad */
+  border-radius: 8px;
+  object-fit: cover; /* Asegura que la imagen mantenga su proporción y rellene el área */
+}
+
+/* Contenedor del botón para agregar productos */
+.addButtonContainer {
+  display: flex;
+  justify-content: center; /* Centra el botón */
+  margin-top: 30px;
 }
 
 /* Botón para agregar productos */
 .addButton {
   padding: 12px 20px;
   font-size: 16px;
-  background-color: #df1c24;
+  background-color: #f83a00;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 30px;
   transition: background-color 0.3s;
 }
 
 .addButton:hover {
-  background-color: #c50f16;
+  background-color: #d10a0a;
 }
 
 /* Sección de solicitudes de productos */
-.requestSection {
+.requestSection,
+.historySection {
   width: 100%;
-  max-width: 900px;
   margin-top: 40px;
   background-color: #fff;
   padding: 20px;
@@ -135,46 +124,30 @@
   text-align: left;
 }
 
-.requestItem {
+.requestItem,
+.historyItem {
   background-color: #f9f9f9;
   padding: 15px;
   margin-bottom: 10px;
   border-left: 5px solid #df1c24;
 }
 
+/* Estilo para las marcas de tiempo */
 .timestamp {
   font-size: 12px;
   color: #666;
   text-align: right;
 }
 
-/* Sección de historial de compras */
-.historySection {
-  width: 100%;
-  max-width: 900px;
-  margin-top: 40px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  .productCard {
+    width: 45%; /* Ajusta las tarjetas en pantallas pequeñas */
+  }
 }
 
-.historyItem {
-  background-color: #f9f9f9;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-left: 5px solid #333;
-}
-
-/* Footer */
-.footer {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 14px;
-  color: #666;
-}
-
-.error {
-  color: red;
-  margin-bottom: 10px;
+@media (max-width: 480px) {
+  .productCard {
+    width: 100%; /* Tarjetas ocupan todo el ancho en pantallas muy pequeñas */
+  }
 }

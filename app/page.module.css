@@ -31,17 +31,12 @@
 }
 
 .inputField {
+  background-color: #fff; /* Fondo blanco */
+  color: #000; /* Texto en negro */
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ffffff; /* Bordes blancos */
+  border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #fff; /* Fondo blanco */
-  color: #000; /* Texto negro */
-}
-
-.inputField:focus {
-  border-color: #ffffff; /* Mantener los bordes blancos al hacer foco */
-  outline: none; /* Eliminar el contorno predeterminado */
 }
 
 .forgotPassword {
@@ -74,3 +69,272 @@
   margin-bottom: 10px;
 }
 
+
+
+
+
+
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.mapSection {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.discountSection {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.discountBanner {
+  background-color: #ffcccc;
+  padding: 20px;
+  text-align: center;
+}
+
+.productGrid {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.productCard {
+  width: 30%;
+  text-align: center;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.productCard img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.button {
+  background-color: #ff3b30
+  ;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #ff3b30;
+}
+
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modalButtons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.locationButton, .cancelButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.locationButton {
+  background-color: #4285f4;
+  color: white;
+}
+
+.cancelButton {
+  background-color: #e0e0e0;
+}
+
+.mapSection {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.locationButton, .cancelButton {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.locationButton {
+  background-color: #28a745;
+}
+
+.cancelButton {
+  background-color: #ff3b30;
+}
+
+
+
+
+
+
+
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.mainLayout {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #001529;
+  color: white;
+  height: 100vh; /* Hace que el sidebar ocupe toda la altura de la página */
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 60px; /* Ajusta según la altura de tu Navbar si es fija */
+}
+
+.content {
+  margin-left: 250px; /* Deja espacio para el sidebar */
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.mapSection {
+  padding: 20px;
+}
+
+.discountSection {
+  padding: 20px;
+}
+
+.productGrid {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+.footer {
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+  position: fixed;
+  bottom: 0;
+  background-color: #f8f8f8;
+}
+
+
+
+
+/* Sidebar */
+/* Estructura de layout principal */
+.mainLayout {
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  flex: 0 0 250px; /* Sidebar de ancho fijo */
+}
+
+/* Contenido principal */
+.content {
+  flex: 1;
+  padding: 20px; /* Espaciado interno del contenido */
+}
+
+/* Asegura que la sección de mapa y las demás secciones se adapten correctamente */
+.error {
+  color: red; /* El color del mensaje de error */
+  font-size: 14px; /* Ajustar el tamaño de la fuente */
+  margin-top: 5px; /* Espacio entre el campo de entrada y el mensaje */
+}
+
+
+
+
+
+
+/* globals.css */
+@import "leaflet/dist/leaflet.css";
+
+.mapSection {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+
+
+/* page.module.css carrusel  */
+.carouselSection {
+  margin-top: 40px;
+}
+
+.carouselSection h2 {
+  font-size: 28px;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
