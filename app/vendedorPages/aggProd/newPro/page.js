@@ -3,28 +3,57 @@ import React, { useState } from 'react';
 import './newPro.css';
 
 export default function NewPro() {
-  const [image, setImage] = useState(null); // Estado para la imagen
+  const [image, setImage] = useState(null);
+  const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [deliveryTime, setDeliveryTime] = useState('');
+  const [stock, setStock] = useState('');
+  const [measure, setMeasure] = useState('');
   const [description, setDescription] = useState('');
-
+  
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-    setImage(URL.createObjectURL(file)); // Crea una URL para la vista previa
+    setImage(URL.createObjectURL(file));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Aquí puedes manejar el envío del formulario
-    console.log({ image, price, deliveryTime, description });
+    
+    const productData = {
+      name,
+      price,
+      stock,
+      measure,
+      description,
+      // Asume que tienes un proceso para manejar la imagen en el backend
+    };
+
+    try {
+      const response = await fetch('https://backend-j959.onrender.com/api/Product/AddProduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
+      });
+
+      if (response.ok) {
+        console.log('Producto agregado exitosamente');
+        // Aquí puedes redirigir o limpiar el formulario después de agregar el producto
+      } else {
+        console.error('Error al agregar el producto');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
     <div className="newProductContainer">
       <h1>Agregar producto</h1>
       <form onSubmit={handleSubmit}>
-        {/* Campo para subir imagen */}
-        <label htmlFor="image">Imagen del producto</label>
+        <label htmlFor="image" className="imageButton">
+          Seleccionar imagen del producto
+        </label>
         <input 
           type="file" 
           id="image" 
@@ -32,13 +61,22 @@ export default function NewPro() {
           onChange={handleImageChange} 
           required 
         />
+
         {image && (
           <div className="imagePreview">
             <img src={image} alt="Vista previa" />
           </div>
         )}
 
-        {/* Campo para precio */}
+        <label htmlFor="name">Nombre del producto</label>
+        <input 
+          type="text" 
+          id="name" 
+          value={name} 
+          onChange={(e) => setName(e.target.value)} 
+          required 
+        />
+
         <label htmlFor="price">Precio (MXN)</label>
         <input 
           type="number" 
@@ -46,21 +84,28 @@ export default function NewPro() {
           value={price} 
           onChange={(e) => setPrice(e.target.value)} 
           required 
-          min="0" // Para aceptar solo números positivos
+          min="0" 
         />
 
-        {/* Campo para tiempo de entrega */}
-        <label htmlFor="deliveryTime">Tiempo de entrega (minutos)</label>
+        <label htmlFor="stock">Stock</label>
         <input 
           type="number" 
-          id="deliveryTime" 
-          value={deliveryTime} 
-          onChange={(e) => setDeliveryTime(e.target.value)} 
+          id="stock" 
+          value={stock} 
+          onChange={(e) => setStock(e.target.value)} 
           required 
-          min="1" // Para aceptar solo números positivos
+          min="0" 
         />
 
-        {/* Campo para descripción */}
+        <label htmlFor="measure">Unidad de medida</label>
+        <input 
+          type="text" 
+          id="measure" 
+          value={measure} 
+          onChange={(e) => setMeasure(e.target.value)} 
+          required 
+        />
+
         <label htmlFor="description">Descripción</label>
         <textarea 
           id="description" 
@@ -69,7 +114,6 @@ export default function NewPro() {
           required 
         />
 
-        {/* Botón para enviar */}
         <button type="submit">Agregar producto</button>
       </form>
     </div>

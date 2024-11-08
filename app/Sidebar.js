@@ -1,24 +1,32 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Sidebar.module.css';
 import { UserOutlined, EditOutlined, LogoutOutlined, ShopOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
-const Sidebar = ({ username }) => {
+const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
+  const [username, setUsername] = useState('');
   const router = useRouter();
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
   const handleLogout = () => {
-    // Elimina el token y otros datos de sesión del almacenamiento local
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-
-    // Redirige al usuario a la página de inicio de sesión
     router.push('/');
+  };
+
+  const goToVendedorRegister = () => {
+    router.push('/pageRegVen');
   };
 
   return (
@@ -45,7 +53,7 @@ const Sidebar = ({ username }) => {
           <EditOutlined className={styles.icon} />
           {isOpen && <span>Editar Perfil</span>}
         </li>
-        <li className={styles.menuItem}>
+        <li className={styles.menuItem} onClick={goToVendedorRegister}>
           <ShopOutlined className={styles.icon} />
           {isOpen && <span>Modo Vendedor</span>}
         </li>

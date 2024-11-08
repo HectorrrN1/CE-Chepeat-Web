@@ -1,0 +1,92 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    height: 100%;
+    background-color: #ffffff;
+}
+
+.title {
+    font-size: 24px; /* Tamaño del texto del título */
+    margin-bottom: 15px;
+    color: #000; /* Color negro */
+    text-align: center; /* Centrar el texto */
+    font-weight: bold; /* Hacer el texto más grueso */
+}
+
+.registerForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.inputField {
+    background-color: #fff;
+    color: #000;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.errorText {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.registerButton {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #df1c24;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.registerButton:hover {
+    opacity: 0.8;
+}
+
+.footer {
+    width: 100%;
+    text-align: center;
+    padding: 15px 0;
+    background-color: #f8f8f8;
+    color: #666;
+    position: fixed;
+    bottom: 0;
+}
+
+.termsAndConditions {
+    font-size: 14px;
+    color: #666;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.termsAndConditions a {
+    color: #df1c24;
+    text-decoration: none;
+}
+
+.termsAndConditions a:hover {
+    text-decoration: underline;
+}
+
+.logo {
+    margin-bottom: 20px; /* Espaciado inferior */
+    width: 100%; /* Asegurarse de que el contenedor tenga el ancho completo */
+    max-width: 200px; /* Limitar el ancho máximo de la imagen si es necesario */
+}
+
+.logo img {
+    width: 70%; /* Ajustar el tamaño de la imagen al contenedor */
+    height: auto; /* Mantener la relación de aspecto */
+}

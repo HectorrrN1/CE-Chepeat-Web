@@ -1,76 +1,154 @@
-/* Estilo del contenedor principal */
+/* Estilo del contenedor principal */ 
 .newProductContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    padding: 20px;
-    background-color: #f5f5f5;
-  }
-  
-  /* Estilo del encabezado */
-  .newProductContainer h1 {
-    color: #df1c24; /* Color del encabezado */
-    margin-bottom: 20px;
-  }
-  
-  /* Estilo del formulario */
-  form {
-    width: 100%; /* Asegúrate de que el formulario ocupe todo el ancho del contenedor */
-    max-width: 500px; /* Ancho máximo del formulario */
-    padding: 20px; /* Espaciado interno */
-    background-color: #fff; /* Color de fondo del formulario */
-    border: 1px solid #ccc; /* Borde del formulario */
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave para el formulario */
-  }
-  
-  /* Estilo de las etiquetas */
-  label {
-    font-weight: bold;
-    margin: 10px 0 5px;
-    color: #333; /* Color del texto de las etiquetas */
-  }
-  
-  /* Estilo de los inputs y textarea */
-  input[type="text"],
-  input[type="number"],
-  textarea {
-    width: 100%; /* Ajusta el ancho al 100% */
-    padding: 12px; /* Espaciado interno para los campos */
-    border: 1px solid #ccc; /* Color del borde */
-    border-radius: 5px; /* Bordes redondeados */
-    font-size: 16px; /* Tamaño de fuente */
-    margin-bottom: 20px; /* Aumenta el espaciado entre los campos */
-    background-color: #fff; /* Color de fondo */
-    color: #333; /* Color del texto */
-  }
-  
-  /* Estilo para la vista previa de la imagen */
-  .imagePreview {
-    display: flex;
-    justify-content: center;
-    margin: 15px 0; /* Espaciado alrededor de la vista previa */
-  }
-  
-  .imagePreview img {
-    max-width: 300px; /* Ajusta el tamaño máximo de la imagen */
-    border-radius: 5px; /* Bordes redondeados para la imagen */
-  }
-  
-  /* Estilo del botón */
-  button {
-    padding: 10px 15px;
-    font-size: 16px;
-    background-color: #df1c24;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #c50f16;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+/* Estilo del encabezado */
+.newProductContainer h1 {
+  color: #df1c24;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Estilo del formulario */
+form {
+  width: 100%;
+  max-width: 600px; /* Ancho máximo del formulario */
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espaciado entre los elementos del formulario */
+}
+
+/* Estilo para el área de imagen */
+#image {
+  display: none; /* Oculta el input de imagen real */
+}
+
+.imageUpload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 15px;
+  background-color: #f7f7f7;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.imageUpload:hover {
+  border-color: #df1c24;
+}
+
+.imageUpload span {
+  font-size: 16px;
+  color: #888;
+}
+
+.imagePreview {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.imagePreview img {
+  max-width: 300px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+/* Estilo de las etiquetas */
+label {
+  font-weight: bold;
+  margin: 5px 0;
+  color: #333;
+}
+
+/* Estilo de los inputs y textarea */
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+}
+
+/* Contenedor de botones */
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Estilo del botón */
+button {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #df1c24;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #c50f16;
+}
+
+/* Estilo para el botón de carga de imagen */
+#image {
+  display: none; /* Oculta el input de imagen real */
+}
+
+.imageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 300px;
+  padding: 15px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #a1a2a7; /* Color llamativo para el botón */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.imageButton:hover {
+  background-color: #c93232; /* Color más oscuro al pasar el mouse */
+  transform: scale(1.05); /* Efecto de agrandamiento ligero */
+}
+
+.imagePreview {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.imagePreview img {
+  max-width: 300px;
+  border-radius: 5px;
+  object-fit: cover;
+}
