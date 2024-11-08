@@ -1,76 +1,175 @@
 /* Estilo del contenedor principal */
 .newProductContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    padding: 20px;
-    background-color: #f5f5f5;
-  }
-  
-  /* Estilo del encabezado */
-  .newProductContainer h1 {
-    color: #df1c24; /* Color del encabezado */
-    margin-bottom: 20px;
-  }
-  
-  /* Estilo del formulario */
-  form {
-    width: 100%; /* Asegúrate de que el formulario ocupe todo el ancho del contenedor */
-    max-width: 500px; /* Ancho máximo del formulario */
-    padding: 20px; /* Espaciado interno */
-    background-color: #fff; /* Color de fondo del formulario */
-    border: 1px solid #ccc; /* Borde del formulario */
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave para el formulario */
-  }
-  
-  /* Estilo de las etiquetas */
-  label {
-    font-weight: bold;
-    margin: 10px 0 5px;
-    color: #333; /* Color del texto de las etiquetas */
-  }
-  
-  /* Estilo de los inputs y textarea */
-  input[type="text"],
-  input[type="number"],
-  textarea {
-    width: 100%; /* Ajusta el ancho al 100% */
-    padding: 12px; /* Espaciado interno para los campos */
-    border: 1px solid #ccc; /* Color del borde */
-    border-radius: 5px; /* Bordes redondeados */
-    font-size: 16px; /* Tamaño de fuente */
-    margin-bottom: 20px; /* Aumenta el espaciado entre los campos */
-    background-color: #fff; /* Color de fondo */
-    color: #333; /* Color del texto */
-  }
-  
-  /* Estilo para la vista previa de la imagen */
-  .imagePreview {
-    display: flex;
-    justify-content: center;
-    margin: 15px 0; /* Espaciado alrededor de la vista previa */
-  }
-  
-  .imagePreview img {
-    max-width: 300px; /* Ajusta el tamaño máximo de la imagen */
-    border-radius: 5px; /* Bordes redondeados para la imagen */
-  }
-  
-  /* Estilo del botón */
-  button {
-    padding: 10px 15px;
-    font-size: 16px;
-    background-color: #df1c24;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #c50f16;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f7f7f7;
+}
+
+/* Estilo del encabezado */
+.newProductContainer h1 {
+  color: #df1c24;
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Estilo del formulario */
+form {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Estilo de las etiquetas */
+label {
+  font-weight: bold;
+  margin: 5px 0;
+  color: #444;
+}
+
+/* Estilo de los inputs y textarea */
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  border-color: #df1c24;
+  outline: none;
+}
+
+/* Estilo para la vista previa de la imagen */
+.imagePreview {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.imagePreview img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* Estilo del botón general */
+button {
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #df1c24;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #c50f16;
+}
+
+/* Estilo para el botón de medida */
+.measureButton {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.measureButton:hover {
+  background-color: #e0e0e0;
+}
+
+/* Estilos del modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal h2 {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+/* Estilo de los botones del modal */
+.modal button {
+  margin: 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+  background-color: #df1c24;
+  color: white;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal button:hover {
+  background-color: #c50f16;
+}
+
+.modal button.selected {
+  background-color: #c50f16;
+}
+
+.closeButton {
+  background-color: #888;
+}
+
+.closeButton:hover {
+  background-color: #666;
+}
+
+/* Botón de "Agregar Producto" alineado a la derecha */
+button[type="submit"] {
+  width: auto;
+  align-self: flex-end;
+}

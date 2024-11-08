@@ -20,6 +20,7 @@ const Sidebar = ({ username }) => {
 
   const handleVendorMode = () => {
     const registroNegocioCompleto = localStorage.getItem('registroNegocioCompleto');
+    console.log('registroNegocioCompleto:', registroNegocioCompleto);
     
     if (registroNegocioCompleto) {
       router.push('/vendedorPages');

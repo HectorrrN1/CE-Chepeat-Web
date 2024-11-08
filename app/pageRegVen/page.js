@@ -1,186 +1,151 @@
 'use client';
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import Footer from '../Footer';
-import './pageVenUbi.css';
+import { useRouter } from 'next/navigation'; // Importamos useRouter
+import './pageVenUbi.css'; // Asegúrate de que la ruta al archivo CSS sea correcta
 
-export default function RegisterSellerPage() {
-  const router = useRouter();
+const RegisterSellerPage = () => {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    const [formData, setFormData] = useState({
+        storeName: '',
+        description: '',
+        street: '',
+        extNumber: '',
+        intNumber: '',
+        neighborhood: '',
+        city: '',
+        state: '',
+        cp: '',
+        addressNotes: '',
+        latitude: 0,  // Establecemos valores por defecto para latitud y longitud
+        longitude: 0, // Establecemos valores por defecto para latitud y longitud
+    });
 
-  const [formData, setFormData] = useState({
-    storeName: '',
-    description: '',
-    street: '',
-    extNumber: '',
-    intNumber: '',
-    neighborhood: '',
-    city: '',
-    state: '',
-    cp: '',
-    addressNotes: '',
-  });
+    const router = useRouter(); // Usamos useRouter para redirigir
 
-  const [errors, setErrors] = useState({
-    storeName: '',
-    cp: '',
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleBlur = (field) => {
-    const newErrors = { ...errors };
-    if (field === 'storeName' && formData.storeName.trim() === '') {
-      newErrors.storeName = 'El nombre de la tienda es obligatorio';
-    } else {
-      newErrors.storeName = '';
-    }
-
-    if (field === 'cp' && formData.cp.trim() === '') {
-      newErrors.cp = 'El código postal es obligatorio';
-    } else {
-      newErrors.cp = '';
-    }
-
-    setErrors(newErrors);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    const noErrors = Object.values(errors).every((error) => error === '');
-  
-    if (noErrors) {
-      try {
-        // Si se necesita un token de autorización, obténlo antes
-        const token = ''; // Reemplaza con el método para obtener tu token si es necesario
-  
-        const response = await axios.post('https://backend-j959.onrender.com/api/Seller/AddUSeller', formData, {
-          headers: {
-            'Authorization': `Bearer ${token}` // Incluye esto si es necesario
-          }
+    // Función para actualizar el estado
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
         });
-  
-        if (response.status === 200) {
-          router.push('/vendedorPages'); // Cambia la ruta de redirección si es necesario
+    };
+
+    // Enviar el formulario
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const sellerData = { ...formData, idUser: userId };
+
+        try {
+            const response = await axios.post('https://backend-j959.onrender.com/api/Seller/AddUSeller', sellerData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log('Vendedor registrado exitosamente:', response.data);
+
+            // Redirigir a la vista de vendedorPages después del registro exitoso
+            router.push('/vendedorPages'); // Cambia la URL de destino a la ruta de la vista de vendedor
+        } catch (error) {
+            console.error('Error al registrar el vendedor:', error);
         }
-      } catch (error) {
-        console.error('Error al registrar el vendedor:', error);
-        // Manejo de errores adicional si es necesario
-      }
-    }
-  };
+    };
 
-  return (
-    <div className="container">
-      <div className="logo">
-        <img src="/imagenes/logo.png" alt="Cheapeat Logo" />
-      </div>
-      <h1 className="title">Registro de Vendedor</h1>
-      <form className="registerForm" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="storeName"
-          placeholder="Nombre de la tienda"
-          className="inputField"
-          value={formData.storeName}
-          onChange={handleChange}
-          onBlur={() => handleBlur('storeName')}
-        />
-        {errors.storeName && <p className="errorText">{errors.storeName}</p>}
+    return (
+        <div className="container">
+            <h2 className="title">Registro de Vendedor</h2>
+            <form onSubmit={handleSubmit} className="loginForm">
+                {/* Campos del formulario */}
+                <input
+                    type="text"
+                    name="storeName"
+                    value={formData.storeName}
+                    onChange={handleChange}
+                    placeholder="Nombre de la tienda"
+                    required
+                    className="inputField"
+                />
+                <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    placeholder="Descripción"
+                    required
+                    className="textareaField"
+                />
+                <input
+                    type="text"
+                    name="street"
+                    value={formData.street}
+                    onChange={handleChange}
+                    placeholder="Calle"
+                    required
+                    className="inputField"
+                />
+                <input
+                    type="text"
+                    name="extNumber"
+                    value={formData.extNumber}
+                    onChange={handleChange}
+                    placeholder="Número Exterior"
+                    required
+                    className="inputField"
+                />
+                <input
+                    type="text"
+                    name="intNumber"
+                    value={formData.intNumber}
+                    onChange={handleChange}
+                    placeholder="Número Interior"
+                    className="inputField"
+                />
+                <input
+                    type="text"
+                    name="neighborhood"
+                    value={formData.neighborhood}
+                    onChange={handleChange}
+                    placeholder="Colonia"
+                    required
+                    className="inputField"
+                />
+                <input
+                    type="text"
+                    name="cp"
+                    value={formData.cp}
+                    onChange={handleChange} // Ya no ejecuta la lógica del código postal
+                    placeholder="Código Postal"
+                    required
+                    className="inputField"
+                />
+                <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    placeholder="Ciudad"
+                    className="inputField"
+                />
+                <input
+                    type="text"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    placeholder="Estado"
+                    className="inputField"
+                />
+                <textarea
+                    name="addressNotes"
+                    value={formData.addressNotes}
+                    onChange={handleChange}
+                    placeholder="Notas sobre la dirección (opcional)"
+                    className="textareaField"
+                />
+                <button type="submit" className="loginButton">Registrar</button>
+            </form>
+        </div>
+    );
+};
 
-        <input
-          type="text"
-          name="description"
-          placeholder="Descripción de la tienda"
-          className="inputField"
-          value={formData.description}
-          onChange={handleChange}
-        />
-
-        <input
-          type="text"
-          name="street"
-          placeholder="Calle"
-          className="inputField"
-          value={formData.street}
-          onChange={handleChange}
-        />
-
-        <input
-          type="text"
-          name="extNumber"
-          placeholder="Número exterior"
-          className="inputField"
-          value={formData.extNumber}
-          onChange={handleChange}
-        />
-
-        <input
-          type="text"
-          name="intNumber"
-          placeholder="Número interior (opcional)"
-          className="inputField"
-          value={formData.intNumber}
-          onChange={handleChange}
-        />
-
-        <input
-          type="text"
-          name="neighborhood"
-          placeholder="Colonia"
-          className="inputField"
-          value={formData.neighborhood}
-          onChange={handleChange}
-        />
-
-        <input
-          type="text"
-          name="city"
-          placeholder="Ciudad"
-          className="inputField"
-          value={formData.city}
-          onChange={handleChange}
-        />
-
-        <input
-          type="text"
-          name="state"
-          placeholder="Estado"
-          className="inputField"
-          value={formData.state}
-          onChange={handleChange}
-        />
-
-        <input
-          type="text"
-          name="cp"
-          placeholder="Código postal"
-          className="inputField"
-          value={formData.cp}
-          onChange={handleChange}
-          onBlur={() => handleBlur('cp')}
-        />
-        {errors.cp && <p className="errorText">{errors.cp}</p>}
-
-        <textarea
-          name="addressNotes"
-          placeholder="Notas adicionales de dirección"
-          className="inputField"
-          value={formData.addressNotes}
-          onChange={handleChange}
-        />
-
-        <button type="submit" className="registerButton">Registrar tienda</button>
-      </form>
-      
-      <div className="termsAndConditions">
-        Al registrarte, aceptas nuestros <a href="/terms">Términos de Servicio</a> y la <a href="/policy">Política de Privacidad</a>.
-      </div>
-      
-
-    </div>
-  );
-}
+export default RegisterSellerPage;

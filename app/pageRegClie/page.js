@@ -12,7 +12,6 @@ export default function LoginPage() {
   const [formData, setFormData] = useState({
     nombre: '',
     email: '',
-    direccion: '',
     password: '',
     confirmPassword: '',
   });
@@ -20,7 +19,6 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({
     nombre: '',
     email: '',
-    direccion: '',
     password: '',
     confirmPassword: '',
   });

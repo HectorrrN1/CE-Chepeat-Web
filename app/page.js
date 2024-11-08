@@ -1,43 +1,38 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // Importa useRouter de next/navigation
+import { useRouter } from 'next/navigation';
 import Footer from './Footer';
 import styles from './page.module.css';
 
 export default function LoginPage() {
-  const router = useRouter(); // Hook para navegación
+  const router = useRouter();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({ email: '', password: '' });
 
   useEffect(() => {
-    // Verificar si ya hay un token en localStorage
     const token = localStorage.getItem('token');
     if (token) {
-      router.push('/home'); // Redirigir a la página de inicio si ya ha iniciado sesión
+      router.push('/home');
     }
-  }, []); // Dependencias vacías para que se ejecute solo una vez al montar
+  }, []);
 
-  // Validación del correo electrónico
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  // Manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     let formIsValid = true;
     const newErrors = { email: '', password: '' };
 
-    // Validar correo
     if (!validateEmail(formData.email)) {
       newErrors.email = 'Por favor, introduce un correo electrónico válido';
       formIsValid = false;
     }
 
-    // Validar contraseña
     if (formData.password.length < 6) {
       newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
       formIsValid = false;
@@ -46,7 +41,6 @@ export default function LoginPage() {
     setErrors(newErrors);
 
     if (formIsValid) {
-      // Eliminar el token anterior antes de iniciar sesión
       localStorage.removeItem('token');
 
       try {
@@ -63,17 +57,25 @@ export default function LoginPage() {
 
         const data = await response.json();
         
-        // Verifica si la respuesta es exitosa
-        console.log('Respuesta del backend:', data); // Para depuración
+        // Mensajes de consola para depuración
+        console.log('Respuesta del backend:', data);
 
-        // Asegúrate de que el token exista antes de almacenarlo
         if (response.ok && data.numError === 1 && data.token) {
           console.log('Inicio de sesión exitoso:', data);
-          localStorage.setItem('token', data.token); // Guardar el token
-          router.push('/home'); // Redirigir a la página home
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('refreshToken', data.refreshToken);
+          localStorage.setItem('userId', data.user.id);
+          localStorage.setItem('userEmail', data.user.email);
+
+//
+       // Verificar los valores de localStorage antes de redirigir
+          console.log(localStorage.getItem('token'));
+          console.log(localStorage.getItem('userId'));
+
+
+          router.push('/home');
         } else {
-          // Maneja el error de autenticación
-          alert(data.result || 'Error al iniciar sesión.'); // Muestra un mensaje de error
+          alert(data.result || 'Error al iniciar sesión.');
         }
       } catch (error) {
         console.error('Error en la solicitud:', error);
@@ -82,11 +84,9 @@ export default function LoginPage() {
     }
   };
 
-  // Manejar cambios en los campos del formulario
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    // Validar al salir del campo (blur)
     const { name, value } = e.target;
     let errorMessage = '';
 
@@ -102,7 +102,7 @@ export default function LoginPage() {
   };
 
   const handleCreateAccount = () => {
-    router.push('/pageRegClie'); // Redirige a la vista de registro
+    router.push('/pageRegClie');
   };
 
   return (
@@ -115,7 +115,6 @@ export default function LoginPage() {
       <br />
 
       <form className={styles.loginForm} onSubmit={handleSubmit}>
-        {/* Campo de correo electrónico */}
         <input
           type="email"
           name="email"
@@ -127,7 +126,6 @@ export default function LoginPage() {
         />
         {errors.email && <p>{errors.email}</p>}
 
-        {/* Campo de contraseña */}
         <input
           type="password"
           name="password"
@@ -147,7 +145,7 @@ export default function LoginPage() {
       <br />
       <button 
         className={styles.createAccountButton}
-        onClick={handleCreateAccount} // Evento de click para crear cuenta
+        onClick={handleCreateAccount}
       >
         Crear Cuenta Nueva
       </button>
