@@ -1,0 +1,57 @@
+.solProContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background-color: #ffffff; /* Fondo blanco para mayor claridad */
+    border-radius: 15px; /* Bordes más redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+    max-width: 400px; /* Ancho máximo para mejor centrado */
+    margin: 20px auto; /* Margen automático para centrar */
+  }
+  
+  .profileIcon {
+    text-align: center;
+    margin-bottom: 20px; /* Espaciado inferior */
+  }
+  
+  .profileIcon img {
+    width: 120px; /* Aumento del tamaño de la imagen */
+    height: 120px; /* Aumento del tamaño de la imagen */
+    border-radius: 50%; /* Mantiene la forma circular */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil en la imagen */
+  }
+  
+  .userName {
+    margin-top: 10px;
+    font-size: 20px; /* Aumento del tamaño de la fuente */
+  }
+  
+  .description {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #555;
+    text-align: center;
+  }
+  
+  .acceptButton {
+    margin-top: 20px;
+    padding: 12px 25px; /* Espaciado más amplio */
+    background-color: #ca230d; /* Color rojo fuerte */
+    color: white;
+    border: none;
+    border-radius: 25px; /* Bordes redondeados para el botón */
+    cursor: pointer;
+    font-size: 16px; /* Tamaño de fuente mayor */
+    transition: background-color 0.3s, transform 0.2s; /* Transiciones suaves */
+  }
+  
+  .acceptButton:hover {
+    background-color: #d61d16; /* Color más brillante al pasar el mouse */
+    transform: scale(1.05); /* Aumento al pasar el mouse */
+  }
+  
+  .description p {
+    margin: 5px 0; /* Espaciado entre las líneas de descripción */
+  }
