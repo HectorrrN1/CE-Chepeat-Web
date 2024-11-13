@@ -86,7 +86,7 @@ export default function LoginPage() {
         });
 
         if (response.status === 200) {
-          // Redirigir a la página de vendedorPages si el registro es exitoso
+          // Redirigir a la página principal si el registro es exitoso
           router.push('/');
         }
       } catch (error) {

@@ -125,3 +125,10 @@
     color: red; /* Color de error */
     margin-bottom: 10px; /* Espacio inferior para mensajes de error */
   }
+
+
+  .errorText {
+    color: red;
+    font-size: 0.875em; /* Ajusta el tamaño de la fuente según sea necesario */
+  }
+  

@@ -110,7 +110,7 @@ export default function LoginPage() {
       <div className={styles.logo}>
         <img src="/imagenes/logo.png" alt="Cheapeat Logo" />
       </div>
-      <h1>Bienvenido a Cheapeat</h1><br />
+      <h1>Bienvenido a Chepeat</h1><br />
       <p>Por favor, inicia sesión para continuar.</p>
       <br />
 
@@ -124,7 +124,7 @@ export default function LoginPage() {
           value={formData.email}
           onChange={handleChange}
         />
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p className={styles.errorMessage}>{errors.email}</p>}
 
         <input
           type="password"
@@ -135,7 +135,7 @@ export default function LoginPage() {
           value={formData.password}
           onChange={handleChange}
         />
-        {errors.password && <p>{errors.password}</p>}
+        {errors.password && <p className={styles.errorMessage}>{errors.password}</p>}
 
         <a href="#" className={styles.forgotPassword}>¿Olvidaste tu contraseña?</a>
         <button type="submit" className={styles.loginButton}>Ingresar</button>

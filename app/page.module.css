@@ -343,3 +343,10 @@
   text-align: center;
   margin-bottom: 20px;
 }
+
+
+
+.errorMessage {
+  color: red;
+  font-size: 0.875em; /* Tamaño de fuente ajustable */
+}
