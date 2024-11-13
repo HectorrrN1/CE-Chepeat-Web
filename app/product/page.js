@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -9,11 +8,29 @@ const ProductCard = () => {
   const [quantity, setQuantity] = useState(1);
   const price = 50.00;
   const totalPrice = price * quantity;
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
+  const [calificacion, setCalificacion] = useState(0);
+  const [comentario, setComentario] = useState('');
   
   const router = useRouter(); // Obtén el enrutador para manejar la navegación
 
   const handlePurchase = () => {
-    router.push('/Compra'); // Redirige a la página de compra
+    setShowApprovalModal(true); // Muestra el modal de solicitud aprobada después de solicitar el producto
+  };
+
+  const handleFinish = () => {
+    setShowApprovalModal(false); // Cierra el modal de solicitud aprobada
+    setShowRatingModal(true); // Muestra el modal de calificación de experiencia
+  };
+
+  const handleReceipt = () => {
+    setShowRatingModal(false); // Cierra el modal de calificación y redirige al home
+    router.push('/home');
+  };
+
+  const handleStarClick = (index) => {
+    setCalificacion(index); // Asigna la calificación cuando se hace clic en las estrellas
   };
 
   return (
@@ -41,7 +58,12 @@ const ProductCard = () => {
           <span>📍</span> Ubicación del restaurante: Verde Carmen, Tula
         </p>
 
-        <textarea className={styles.commentsBox} placeholder="Añadir comentario..."></textarea>
+        <textarea 
+          className={styles.textarea}
+          placeholder="Añadir comentario..."
+          value={comentario}
+          onChange={(e) => setComentario(e.target.value)}
+        />
 
         {/* Total y botón de compra */}
         <div className={styles.purchaseSection}>
@@ -49,6 +71,44 @@ const ProductCard = () => {
           <button className={styles.buyButton} onClick={handlePurchase}>Solicitar producto</button>
         </div>
       </div>
+
+      {/* Modal de solicitud aprobada */}
+      {showApprovalModal && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h1>Solicitud Aprobada</h1>
+            <p>Tu solicitud de compra ha sido enviada y aprobada por el vendedor. ¡Gracias por elegir Cheapeat!</p>
+            <button className={styles.button} onClick={handleFinish}>Recibí el producto</button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de calificación de compra */}
+      {showRatingModal && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h1>Califique su experiencia de compra</h1>
+            <div className={styles.stars}>
+              {[...Array(5)].map((_, index) => (
+                <span
+                  key={index}
+                  onClick={() => handleStarClick(index + 1)}
+                  className={`${styles.star} ${index < calificacion ? styles.active : ''}`}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            <textarea
+              className={styles.textarea}
+              placeholder="Escriba sus comentarios aquí..."
+              value={comentario}
+              onChange={(e) => setComentario(e.target.value)}
+            />
+            <button onClick={handleReceipt} className={styles.button}>Finalizar Compra</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
