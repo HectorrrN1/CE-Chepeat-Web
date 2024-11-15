@@ -80,6 +80,10 @@ export default function LoginPage() {
           const fullname = data.user.fullname || 'Usuario';
           localStorage.setItem('username', fullname);
 
+          // Guardar si el usuario es vendedor
+          const isSeller = data.user.isSeller || false;  // Verificamos si es vendedor
+          localStorage.setItem('isSeller', isSeller);   // Guardamos en el localStorage
+
           // Redirigir a la página principal
           router.push('/home');
         } else {

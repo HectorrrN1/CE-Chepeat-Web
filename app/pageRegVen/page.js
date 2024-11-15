@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation'; // Usamos useRouter para redirigir
 import './pageVenUbi.css'; // Asegúrate de que la ruta al archivo CSS sea correcta
@@ -8,6 +8,7 @@ import './pageVenUbi.css'; // Asegúrate de que la ruta al archivo CSS sea corre
 const RegisterSellerPage = () => {
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId'); // Asegúrate de tener el ID de usuario en el localStorage
+  const isSeller = localStorage.getItem('isSeller'); // Verifica si el usuario es vendedor
   const [formData, setFormData] = useState({
     storeName: '',
     description: '',
@@ -42,6 +43,13 @@ const RegisterSellerPage = () => {
     }
     return true;
   };
+
+  // Redirigir si el usuario ya es vendedor
+  useEffect(() => {
+    if (isSeller === 'true') {
+      router.push('/vendedorPages'); // Redirigir a vendedorPages si ya es vendedor
+    }
+  }, [isSeller, router]);
 
   // Enviar el formulario
   const handleSubmit = async (e) => {
@@ -88,7 +96,8 @@ const RegisterSellerPage = () => {
       console.log('Respuesta del servidor:', data);
 
       alert('Registro exitoso');
-      router.push('/home'); // Redirige al home después de un registro exitoso
+      localStorage.setItem('isSeller', 'true'); // Actualizar el estado de isSeller en el localStorage
+      router.push('/vendedorPages'); // Redirige a vendedorPages después de un registro exitoso
     } catch (error) {
       console.error('Error en la solicitud:', error);
       alert('Ocurrió un error al enviar los datos.');
