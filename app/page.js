@@ -42,6 +42,7 @@ export default function LoginPage() {
 
     if (formIsValid) {
       localStorage.removeItem('token');
+      localStorage.removeItem('userId'); // Aseguramos que no quede un ID obsoleto
 
       try {
         const response = await fetch('https://backend-j959.onrender.com/api/Auth/IniciarSesion', {
@@ -56,24 +57,31 @@ export default function LoginPage() {
         });
 
         const data = await response.json();
-        
+
         console.log('Respuesta completa del backend:', data);
 
         if (response.ok && data.numError === 1 && data.token) {
           console.log('Inicio de sesión exitoso:', data);
 
-          // Almacenar el nombre completo desde data.user.fullname
-          const fullname = data.user.fullname;
-          if (fullname) {
-            localStorage.setItem('username', fullname);
-            console.log('Nombre completo guardado:', fullname);
+          // Guardar token
+          localStorage.setItem('token', data.token);
+
+          // Guardar userId si está disponible
+          if (data.user && data.user.id) {
+            localStorage.setItem('userId', data.user.id);
+            console.log('User ID guardado:', data.user.id);
           } else {
-            console.warn('El backend no envió un campo de fullname dentro de user.');
-            localStorage.setItem('username', 'Usuario'); // Valor predeterminado
+            console.warn('El backend no envió un campo id dentro de user.');
+            alert('Error: No se pudo obtener el ID de usuario.');
+            return;
           }
 
-          localStorage.setItem('token', data.token); // Guardar el token
-          router.push('/home'); // Redirigir a la página home
+          // Guardar nombre completo (opcional)
+          const fullname = data.user.fullname || 'Usuario';
+          localStorage.setItem('username', fullname);
+
+          // Redirigir a la página principal
+          router.push('/home');
         } else {
           alert(data.result || 'Error al iniciar sesión.');
         }

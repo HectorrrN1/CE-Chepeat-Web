@@ -58,12 +58,7 @@ const ProductCard = () => {
           <span>📍</span> Ubicación del restaurante: Verde Carmen, Tula
         </p>
 
-        <textarea 
-          className={styles.textarea}
-          placeholder="Añadir comentario..."
-          value={comentario}
-          onChange={(e) => setComentario(e.target.value)}
-        />
+     
 
         {/* Total y botón de compra */}
         <div className={styles.purchaseSection}>
