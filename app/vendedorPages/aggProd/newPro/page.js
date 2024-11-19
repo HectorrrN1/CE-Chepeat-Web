@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './newPro.css';
 
 export default function NewPro() {
@@ -9,7 +9,44 @@ export default function NewPro() {
   const [stock, setStock] = useState('');
   const [measure, setMeasure] = useState('');
   const [description, setDescription] = useState('');
-  
+  const [idSeller, setIdSeller] = useState('');
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    // Obtener el token y el userId desde localStorage
+    const storedToken = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    if (storedToken && userId) {
+      setToken(storedToken);
+      console.log('Token y userId obtenidos:', storedToken, userId);
+
+      // Hacer la solicitud al backend para obtener el idSeller
+      fetchSellerByIdUser(userId);
+    } else {
+      console.log('No se encontró el token o userId en localStorage');
+    }
+  }, []);
+
+  // Función para obtener el idSeller a partir del userId
+  const fetchSellerByIdUser = async (userId) => {
+    try {
+      const response = await fetch(`https://backend-j959.onrender.com/api/Seller/SelectSellerByIdUser?idUser=${userId}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.idSeller) {
+          setIdSeller(data.idSeller);
+          console.log('idSeller obtenido:', data.idSeller);
+        } else {
+          console.log('No se encontró idSeller para este userId');
+        }
+      } else {
+        console.error('Error al obtener el idSeller');
+      }
+    } catch (error) {
+      console.error('Error al hacer la petición al backend:', error);
+    }
+  };
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setImage(URL.createObjectURL(file));
@@ -17,21 +54,30 @@ export default function NewPro() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
+    // Asegurarse de que el idSeller esté disponible antes de enviar la solicitud
+    if (!idSeller) {
+      console.error('idSeller no disponible');
+      return;
+    }
+
     const productData = {
       name,
       price,
       stock,
       measure,
       description,
-      // Asume que tienes un proceso para manejar la imagen en el backend
+      idSeller, // Incluye el idSeller en los datos del producto
     };
 
     try {
+      console.log('Datos del producto a enviar:', productData);
+
       const response = await fetch('https://backend-j959.onrender.com/api/Product/AddProduct', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Incluye el token de autorización
         },
         body: JSON.stringify(productData),
       });
