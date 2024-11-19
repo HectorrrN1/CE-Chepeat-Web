@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import './pageVen.css'; // Importa el CSS específico para la página de vendedor
@@ -22,15 +22,9 @@ export default function VendedorPage() {
 
   return (
     <div className="pageContainer">
-      <Sidebar /> {/* Coloca el Sidebar aquí */}
+      <Sidebar /> {/* Sidebar al lado izquierdo */}
 
       <div className="contentArea">
-        {/* Navbar */}
-        <nav className="navbar">
-          <h1 className="navbarTitle">Chepeat</h1>
-          <button className="menuButton">Menú</button>
-        </nav>
-
         <h1 className="title">Mis productos</h1>
 
         {/* Lista de productos */}

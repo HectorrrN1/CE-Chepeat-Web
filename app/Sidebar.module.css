@@ -1,7 +1,9 @@
 /* Estilos generales del sidebar */
 .sidebarOpen {
     width: 250px;
-    background-color: #333;
+    background-color:#333
+
+    ;
     color: white;
     height: 100vh;
     display: flex;
@@ -68,7 +70,7 @@
   }
   
   .menuItem:hover {
-    background-color: #7e7a7a;
+    background-color: #7e7e7a;
   }
   
   .icon {

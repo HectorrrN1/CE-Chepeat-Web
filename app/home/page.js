@@ -38,6 +38,7 @@ const Page = () => {
 
   return (
     <div className={styles.pageContainer}>
+      
       {showModal && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
@@ -55,10 +56,10 @@ const Page = () => {
         </div>
       )}
 
-      <Navbar />
-      
+     {/*<Navbar />*/}
+    
       <div className={styles.mainLayout}>
-        <Sidebar username="Juan Pérez" />
+      <Sidebar /> {/* Sidebar al lado izquierdo */}
 
         <div className={styles.content}>
           <div className={styles.mapSection}>

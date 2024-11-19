@@ -1,64 +1,108 @@
+/* Reseteo global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* Elimina cualquier scroll innecesario */
+}
+
+#root, #__next {
+  height: 100%;
+}
+
+/* Contenedor principal */
 .pageContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-  }
-  
-  .mapSection {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-  
-  .discountSection {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .discountBanner {
-    background-color: #ffcccc;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .productGrid {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin-bottom: 40px;
-  }
-  
-  .productCard {
-    width: 30%;
-    text-align: center;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
-  .productCard img {
-    max-width: 100%;
-    border-radius: 8px;
-  }
-  
-  button {
-    background-color: #ff3b30;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #e32e25;
-  }
-  
-  .logo img {
-    width: 120px;
-    margin-bottom: 20px;
-  }
+  display: flex;
+  height: 100vh;
+  width: 100vw; /* Asegura que ocupe toda la pantalla */
+  overflow: hidden; /* Previene scroll */
+  position: relative; /* Para asegurar que los hijos se posicionen correctamente */
+}
+
+/* Sidebar fijo y sin separación */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 250px;
+  background-color: #333;
+  color: white;
+  padding: 0; /* Elimina padding interno si existiera */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Contenido principal ajustado */
+.mainLayout {
+  margin-left: 250px; /* Espacio reservado para el Sidebar */
+  flex: 1;
+  width: calc(100% - 250px); /* Ajusta al espacio restante */
+  height: 100%;
+  padding: 20px;
+  overflow-y: auto; /* Permite scroll si el contenido es extenso */
+  box-sizing: border-box;
+}
+
+/* Map Section */
+.mapSection {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Discount Section */
+.discountSection {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.discountBanner {
+  background-color: #ffcccc;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+/* Productos */
+.productGrid {
+  display: flex;
+  flex-wrap: wrap; /* Ajusta automáticamente las filas */
+  gap: 20px; /* Espacio entre elementos */
+  justify-content: space-around;
+  width: 100%;
+}
+
+.productCard {
+  width: 30%;
+  text-align: center;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.productCard img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+button {
+  background-color: #ff3b30;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #e32e25;
+}

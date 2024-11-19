@@ -60,7 +60,7 @@ export default function LoginPage() {
 
         console.log('Respuesta completa del backend:', data);
 
-        if (response.ok && data.numError === 1 && data.token) {
+        if (response.ok && data.numError === 0 && data.token) {
           console.log('Inicio de sesión exitoso:', data);
 
           // Guardar token

@@ -1,77 +1,48 @@
 /* Contenedor principal */
-.container {
+.pageContainer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* Cambiar a flex-start para evitar que el contenido se centre verticalmente */
   min-height: 100vh;
-  padding: 0; /* Remueve padding adicional del contenedor principal */
   background-color: #f5f5f5;
   box-sizing: border-box;
 }
 
-/* Navbar (Barra de navegación) */
-.navbar {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px; /* Ajusta el espacio alrededor del contenido del navbar */
-  background-color: #df1c24; /* Color de fondo rojo oscuro */
-  color: white; /* Texto en blanco */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
-  position: sticky; /* Mantener el navbar pegado al principio de la página */
-  top: 0; /* Siempre en la parte superior */
-  z-index: 100; /* Asegura que el navbar se mantenga visible sobre el contenido */
+/* Sidebar */
+.sidebar {
+  width: 250px; /* Ajusta el tamaño del sidebar según sea necesario */
+  background-color: #333; /* Color de fondo del sidebar */
+  color: white; /* Color del texto del sidebar */
+  height: 100vh; /* Asegura que el sidebar ocupe toda la altura de la pantalla */
+  padding: 20px;
+  position: fixed; /* Fija el sidebar a la izquierda */
 }
 
-/* Título del navbar */
-.navbarTitle {
-  font-size: 24px;
-  font-weight: bold;
+/* Área de contenido */
+.contentArea {
+  margin-left: 250px; /* Desplaza el contenido hacia la derecha para no cubrir el sidebar */
+  padding: 20px;
+  width: calc(100% - 250px); /* Asegura que el contenido ocupe el espacio restante */
+  box-sizing: border-box;
+  max-width: 1200px; /* O cualquier otro límite de ancho que desees */
+  margin: 0 auto; /* Centra el contenido dentro de la página */
 }
 
-/* Botón del menú */
-.menuButton {
-  padding: 10px 20px;
-  background-color: #fff;
-  color: #df1c24; /* Color rojo oscuro para el texto del botón */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.menuButton:hover {
-  background-color: #f0f0f0; /* Color más claro al pasar el ratón */
-}
-
-/* Encabezado de la aplicación */
-.header {
-  font-size: 36px;
-  color: #df1c24;
-  text-align: center;
-  margin-bottom: 0; /* Cambiado a 0 para eliminar el espacio debajo del encabezado */
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-/* Título principal */
+/* Título */
 .title {
   font-size: 28px;
-  margin-top: 10px; /* Ajusta el margen superior si es necesario */
+  margin-top: 10px;
   margin-bottom: 20px;
   color: #333;
   text-align: center;
 }
 
-/* Contenedor de la lista de productos */
+/* Lista de productos */
 .productList {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   width: 100%;
   max-width: 900px;
+  margin: 0 auto; /* Centra la lista de productos */
 }
 
 /* Estilo de cada producto */
@@ -111,11 +82,39 @@
   cursor: pointer;
   margin-top: 30px;
   transition: background-color 0.3s;
+  display: block;
+  margin-left: auto;
+  margin-right: auto; /* Centra el botón */
 }
 
 .addButton:hover {
   background-color: #c50f16;
 }
+
+/* Sección de solicitudes de productos */
+.requestSection,
+.historySection {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 40px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 0 auto; /* Centra las secciones */
+}
+
+/* Footer */
+.footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+
+
+
 
 /* Sección de solicitudes de productos */
 .requestSection {
