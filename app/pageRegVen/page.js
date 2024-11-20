@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation'; // Usamos useRouter para redirigir
-import './pageVenUbi.css'; // Asegúrate de que la ruta al archivo CSS sea correcta
+import { useRouter } from 'next/navigation';
+import './pageVenUbi.css';
 
 const RegisterSellerPage = () => {
   const token = localStorage.getItem('token');
-  const userId = localStorage.getItem('userId'); // Asegúrate de tener el ID de usuario en el localStorage
-  const isSeller = localStorage.getItem('isSeller'); // Verifica si el usuario es vendedor
+  const userId = localStorage.getItem('userId');
+  const isSeller = localStorage.getItem('isSeller');
   const [formData, setFormData] = useState({
     storeName: '',
     description: '',
@@ -20,13 +19,18 @@ const RegisterSellerPage = () => {
     state: '',
     cp: '',
     addressNotes: '',
-    latitude: 0, // Establecemos valores por defecto para latitud y longitud
-    longitude: 0, // Establecemos valores por defecto para latitud y longitud
+    latitude: 0,
+    longitude: 0,
   });
 
-  const router = useRouter(); // Usamos useRouter para redirigir
+  const router = useRouter();
 
-  // Función para actualizar el estado
+  useEffect(() => {
+    if (isSeller === 'true') {
+      router.push('/vendedorPages');
+    }
+  }, [isSeller, router]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -35,7 +39,6 @@ const RegisterSellerPage = () => {
     });
   };
 
-  // Validar formulario antes de enviarlo
   const validateForm = () => {
     if (!formData.storeName || !formData.description || !formData.street || !formData.extNumber || !formData.neighborhood || !formData.cp) {
       alert('Por favor, completa todos los campos obligatorios.');
@@ -44,18 +47,9 @@ const RegisterSellerPage = () => {
     return true;
   };
 
-  // Redirigir si el usuario ya es vendedor
-  useEffect(() => {
-    if (isSeller === 'true') {
-      router.push('/vendedorPages'); // Redirigir a vendedorPages si ya es vendedor
-    }
-  }, [isSeller, router]);
-
-  // Enviar el formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validar el formulario antes de enviarlo
     if (!validateForm()) {
       return;
     }
@@ -67,21 +61,25 @@ const RegisterSellerPage = () => {
         return;
       }
 
+      console.log('Datos enviados al backend:', {
+        ...formData,
+        idUser: userId,
+      });
+
       const response = await fetch('https://backend-j959.onrender.com/api/Seller/AddUSeller', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Incluir el token en los encabezados
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           ...formData,
-          idUser: userId, // Enviar el ID del usuario
+          idUser: userId,
         }),
       });
 
       if (!response.ok) {
-        // Manejar errores HTTP
-        const errorText = await response.text(); // Leer el texto de error si existe
+        const errorText = await response.text();
         console.error('Error HTTP:', response.status, errorText);
         if (response.status === 401) {
           alert('No estás autorizado para realizar esta acción. Verifica tu sesión.');
@@ -92,12 +90,19 @@ const RegisterSellerPage = () => {
         return;
       }
 
-      const data = await response.json(); // Solo intentar parsear si la respuesta es exitosa
-      console.log('Respuesta del servidor:', data);
+      const data = await response.json();
+      console.log('Respuesta completa del servidor:', data);
 
-      alert('Registro exitoso');
-      localStorage.setItem('isSeller', 'true'); // Actualizar el estado de isSeller en el localStorage
-      router.push('/vendedorPages'); // Redirige a vendedorPages después de un registro exitoso
+      if (data.seller && data.seller.id) {
+        console.log('ID del vendedor registrado:', data.seller.id);
+        localStorage.setItem('idSeller', data.seller.id);
+        alert('Registro exitoso');
+        localStorage.setItem('isSeller', 'true');
+        router.push('/vendedorPages');
+      } else {
+        console.error('El servidor no devolvió el ID del vendedor.');
+        alert('Registro exitoso, pero no se recibió el ID del vendedor.');
+      }
     } catch (error) {
       console.error('Error en la solicitud:', error);
       alert('Ocurrió un error al enviar los datos.');
@@ -108,7 +113,6 @@ const RegisterSellerPage = () => {
     <div className="container">
       <h2 className="title">Registro de Vendedor</h2>
       <form onSubmit={handleSubmit} className="loginForm">
-        {/* Campos del formulario */}
         <input
           type="text"
           name="storeName"
@@ -165,7 +169,7 @@ const RegisterSellerPage = () => {
           type="text"
           name="cp"
           value={formData.cp}
-          onChange={handleChange} // Ya no ejecuta la lógica del código postal
+          onChange={handleChange}
           placeholder="Código Postal"
           required
           className="inputField"

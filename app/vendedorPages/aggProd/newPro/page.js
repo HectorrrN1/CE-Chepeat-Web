@@ -1,5 +1,7 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Importar useRouter para redirigir
 import './newPro.css';
 
 export default function NewPro() {
@@ -11,41 +13,21 @@ export default function NewPro() {
   const [description, setDescription] = useState('');
   const [idSeller, setIdSeller] = useState('');
   const [token, setToken] = useState('');
+  const [products, setProducts] = useState([]);
+  const router = useRouter(); // Instanciar el router
 
   useEffect(() => {
-    // Obtener el token y el userId desde localStorage
     const storedToken = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
-    if (storedToken && userId) {
-      setToken(storedToken);
-      console.log('Token y userId obtenidos:', storedToken, userId);
+    const storedIdSeller = localStorage.getItem('idSeller');
 
-      // Hacer la solicitud al backend para obtener el idSeller
-      fetchSellerByIdUser(userId);
+    if (storedToken && storedIdSeller) {
+      setToken(storedToken);
+      setIdSeller(storedIdSeller);
+      console.log('Token e idSeller obtenidos:', storedToken, storedIdSeller);
     } else {
-      console.log('No se encontró el token o userId en localStorage');
+      console.error('Token o idSeller no disponibles en localStorage.');
     }
   }, []);
-
-  // Función para obtener el idSeller a partir del userId
-  const fetchSellerByIdUser = async (userId) => {
-    try {
-      const response = await fetch(`https://backend-j959.onrender.com/api/Seller/SelectSellerByIdUser?idUser=${userId}`);
-      if (response.ok) {
-        const data = await response.json();
-        if (data.idSeller) {
-          setIdSeller(data.idSeller);
-          console.log('idSeller obtenido:', data.idSeller);
-        } else {
-          console.log('No se encontró idSeller para este userId');
-        }
-      } else {
-        console.error('Error al obtener el idSeller');
-      }
-    } catch (error) {
-      console.error('Error al hacer la petición al backend:', error);
-    }
-  };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -55,9 +37,9 @@ export default function NewPro() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Asegurarse de que el idSeller esté disponible antes de enviar la solicitud
     if (!idSeller) {
       console.error('idSeller no disponible');
+      alert('No se puede agregar el producto. Por favor, verifica tu sesión.');
       return;
     }
 
@@ -67,7 +49,7 @@ export default function NewPro() {
       stock,
       measure,
       description,
-      idSeller, // Incluye el idSeller en los datos del producto
+      idSeller,
     };
 
     try {
@@ -77,20 +59,34 @@ export default function NewPro() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Incluye el token de autorización
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(productData),
       });
 
       if (response.ok) {
         console.log('Producto agregado exitosamente');
-        // Aquí puedes redirigir o limpiar el formulario después de agregar el producto
+        alert('Producto agregado exitosamente.');
+        setProducts((prevProducts) => [...prevProducts, productData]);
+        setName('');
+        setPrice('');
+        setStock('');
+        setMeasure('');
+        setDescription('');
+        setImage(null);
       } else {
         console.error('Error al agregar el producto');
+        alert('Hubo un error al agregar el producto. Por favor, inténtalo de nuevo.');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error al enviar la solicitud:', error);
+      alert('Ocurrió un error al agregar el producto.');
     }
+  };
+
+  // Función para redirigir a la página "Mis productos"
+  const goToMyProducts = () => {
+    router.push('/vendedorPages/aggProd');
   };
 
   return (
@@ -100,12 +96,12 @@ export default function NewPro() {
         <label htmlFor="image" className="imageButton">
           Seleccionar imagen del producto
         </label>
-        <input 
-          type="file" 
-          id="image" 
-          accept="image/*" 
-          onChange={handleImageChange} 
-          required 
+        <input
+          type="file"
+          id="image"
+          accept="image/*"
+          onChange={handleImageChange}
+          required
         />
 
         {image && (
@@ -115,53 +111,58 @@ export default function NewPro() {
         )}
 
         <label htmlFor="name">Nombre del producto</label>
-        <input 
-          type="text" 
-          id="name" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)} 
-          required 
+        <input
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
         />
 
         <label htmlFor="price">Precio (MXN)</label>
-        <input 
-          type="number" 
-          id="price" 
-          value={price} 
-          onChange={(e) => setPrice(e.target.value)} 
-          required 
-          min="0" 
+        <input
+          type="number"
+          id="price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          required
+          min="0"
         />
 
         <label htmlFor="stock">Stock</label>
-        <input 
-          type="number" 
-          id="stock" 
-          value={stock} 
-          onChange={(e) => setStock(e.target.value)} 
-          required 
-          min="0" 
+        <input
+          type="number"
+          id="stock"
+          value={stock}
+          onChange={(e) => setStock(e.target.value)}
+          required
+          min="0"
         />
 
         <label htmlFor="measure">Unidad de medida</label>
-        <input 
-          type="text" 
-          id="measure" 
-          value={measure} 
-          onChange={(e) => setMeasure(e.target.value)} 
-          required 
+        <input
+          type="text"
+          id="measure"
+          value={measure}
+          onChange={(e) => setMeasure(e.target.value)}
+          required
         />
 
         <label htmlFor="description">Descripción</label>
-        <textarea 
-          id="description" 
-          value={description} 
-          onChange={(e) => setDescription(e.target.value)} 
-          required 
+        <textarea
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
         />
 
         <button type="submit">Agregar producto</button>
       </form>
+
+      {/* Botón para redirigir a "Mis productos" */}
+      <button className="myProductsButton" onClick={goToMyProducts}>
+        Mis productos
+      </button>
     </div>
   );
 }
