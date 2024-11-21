@@ -2,7 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import './aggProd.css';
+
+
+
+
 
 export default function MyProducts() {
   const [products, setProducts] = useState([]);
@@ -10,6 +15,7 @@ export default function MyProducts() {
   const [error, setError] = useState(null);
   const [token, setToken] = useState('');
   const [idSeller, setIdSeller] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     // Obtener token e idSeller desde localStorage
@@ -78,6 +84,16 @@ export default function MyProducts() {
           ))}
         </div>
       )}
+
+
+
+
+
+        {/* Botón para agregar productos */}
+        <button className="addButton" onClick={() => router.push('/vendedorPages/aggProd/newPro')}>
+          Agregar productos
+        </button>
+
     </div>
   );
 }
