@@ -1,74 +1,83 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './aggProd.css';
 
-export default function AggProd() {
-  const router = useRouter();
+export default function MyProducts() {
   const [products, setProducts] = useState([]);
-  const idSeller = localStorage.getItem('idSeller'); // Obtener el idSeller desde localStorage
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [token, setToken] = useState('');
+  const [idSeller, setIdSeller] = useState('');
 
-  // Obtener productos del vendedor con el idSeller almacenado
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        if (!idSeller) {
-          console.error('El idSeller no está en localStorage');
-          return;
+    // Obtener token e idSeller desde localStorage
+    const storedToken = localStorage.getItem('token');
+    const storedIdSeller = localStorage.getItem('idSeller');
+
+    if (storedToken && storedIdSeller) {
+      setToken(storedToken);
+      setIdSeller(storedIdSeller);
+      fetchProducts(storedToken, storedIdSeller);
+    } else {
+      setError('No se encontraron las credenciales necesarias. Por favor, inicia sesión nuevamente.');
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchProducts = async (token, idSeller) => {
+    try {
+      console.log('Enviando solicitud al backend con idSeller:', idSeller);
+
+      const response = await axios.post(
+        'https://backend-j959.onrender.com/api/Product/GetProductsByIdSeller',
+        idSeller, // Enviamos solo la cadena como en Postman
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
         }
+      );
 
-        const response = await fetch(
-          `https://backend-j959.onrender.com/api/Product/GetProductsByIdSeller`
-        );
-
-        if (!response.ok) {
-          console.error('Error al obtener los productos:', response.status, response.statusText);
-          return;
-        }
-
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
+      if (response.status === 200) {
+        console.log('Productos obtenidos:', response.data);
+        setProducts(response.data);
+      } else {
+        console.error('Error en la respuesta del servidor:', response.status);
+        setError('Error al obtener los productos.');
       }
-    };
-
-    fetchProducts();
-  }, [idSeller]); // Ejecutar efecto solo cuando el idSeller cambia
-
-  const handleAddProductClick = () => {
-    router.push('/vendedorPages/aggProd/newPro');
+    } catch (err) {
+      console.error('Error al realizar la solicitud:', err);
+      setError('Ocurrió un error al obtener los productos.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="container">
-      <nav className="navbar">
-        <h1 className="navbarTitle">Vendedor Chepeat</h1>
-      </nav>
-      <div className="productHeader">
-        <h2 className="title">Tus productos</h2>
-        <button className="addNewButton" onClick={handleAddProductClick}>
-          Añadir Nuevo
-        </button>
-      </div>
-      <div className="productList">
-        {products.length > 0 ? (
-          products.map((product) => (
-            <div key={product.id} className="productItem">
-              <img
-                src={product.image || '/default-image.jpg'}
-                alt={product.name}
-                className="productImage"
-              />
+    <div className="myProductsContainer">
+      <h1>Mis Productos</h1>
+
+      {loading && <p>Cargando productos...</p>}
+      {error && <p className="error">{error}</p>}
+
+      {!loading && !error && products.length === 0 && <p>No tienes productos registrados.</p>}
+
+      {!loading && !error && products.length > 0 && (
+        <div className="product-grid"> {/* Cambio de className a "product-grid" */}
+          {products.map((product) => (
+            <div key={product.id} className="product-card"> {/* Cambio de className a "product-card" */}
+              <img src={product.imagenUrl} alt={product.name} className="product-image" />
               <h3>{product.name}</h3>
-              <p>Precio: ${product.price}</p>
               <p>{product.description}</p>
+              <p><strong>Precio:</strong> ${product.price}</p>
+              <p><strong>Stock:</strong> {product.stock} {product.measure}</p>
             </div>
-          ))
-        ) : (
-          <p>No tienes productos agregados.</p>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
