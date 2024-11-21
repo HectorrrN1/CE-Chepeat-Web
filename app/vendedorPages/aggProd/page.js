@@ -94,6 +94,15 @@ export default function MyProducts() {
           Agregar productos
         </button>
 
+
+        {/* Botón para volver  a la pagina de vendedores  */}
+        <button className="addButton" onClick={() => router.push('/vendedorPages')}>
+          Inicio vendedor
+        </button>
+
+
+
+
     </div>
   );
 }
