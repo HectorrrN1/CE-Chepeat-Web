@@ -1,67 +1,201 @@
 'use client';
-import React from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import './detallePro.css'; // Importa el CSS específico para la página de detalles
+
+import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import './detallePro.css';
 
 export default function DetalleProPage() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const productName = decodeURIComponent(pathname.split('/').pop()); // Extrae el nombre del producto de la URL
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [message, setMessage] = useState("");
 
-  // Información de productos para mostrar según el clic
-  const productDetails = {
-    'Producto 1': {
-      price: '$50.00',
-      description: 'Hamburguesa perfecta para satisfacer el hambre',
-      deliveryTime: '30 min - 1 hora',
-      image: '/imagenes/pro1.jpg', // Añade la imagen
-    },
-    'Producto 2': {
-      price: '$40.00',
-      description: 'Tacos deliciosos ',
-      deliveryTime: '15 min - 30 min',
-      image: '/imagenes/pro2.jpg', // Añade la imagen
-    },
-    'Producto 3': {
-      price: '$50.00',
-      description: 'Pizza a buen precio para evitar el hambre',
-      deliveryTime: '45 min - 1 hora',
-      image: '/imagenes/pro3.jpg', // Añade la imagen
-    },
+  const pathname = usePathname();
+  const productId = decodeURIComponent(pathname.split('/').pop()); // Obtiene el ID del producto desde la URL
+
+  useEffect(() => {
+    fetchProductDetails();
+  }, []);
+
+  const fetchProductDetails = async () => {
+    if (!productId) {
+      setError('ID de producto no encontrado.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token no encontrado. Por favor, inicia sesión.');
+      }
+
+      const response = await fetch('https://backend-j959.onrender.com/api/Product/GetProductById', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(productId),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.title || 'Error al obtener los detalles del producto');
+      }
+
+      const data = await response.json();
+      setProduct(data);
+      setFormData(data); // Inicializar los datos del formulario con los detalles del producto
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const product = productDetails[productName];
+  const handleUpdateProduct = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('https://backend-j959.onrender.com/api/Product/UpdateProduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.title || 'Error al actualizar el producto.');
+      }
+
+      const data = await response.json();
+      setMessage(data.result || "Producto actualizado exitosamente.");
+      fetchProductDetails(); // Recargar detalles del producto
+    } catch (err) {
+      setMessage(err.message || "Error al actualizar el producto.");
+    }
+  };
+
+  const handleDeleteProduct = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('https://backend-j959.onrender.com/api/Product/DeleteProduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(productId),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.title || 'Error al eliminar el producto.');
+      }
+
+      const data = await response.json();
+      setMessage(data.result || "Producto eliminado exitosamente.");
+      setProduct(null); // Limpia los detalles del producto después de eliminarlo
+    } catch (err) {
+      setMessage(err.message || "Error al eliminar el producto.");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  if (loading) {
+    return <p>Cargando detalles del producto...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div className="detailContainer">
-      <div className="detailsContainer"> {/* Usar el contenedor de detalles */}
-        {/* Imagen del producto */}
-        <img src={product?.image} alt={productName} className="productImage" />
-        
-        <h1 className="productName">{productName}</h1>
-        <p className="productPrice">{product?.price}</p>
-        <p className="productDescription">{product?.description}</p>
-        <p className="deliveryTime">Tiempo estimado de entrega: {product?.deliveryTime}</p>
+      <div className="detailsContainer">
+        {product?.imagenUrl ? (
+          <img src={product.imagenUrl} alt={product.name} className="productImage" />
+        ) : (
+          <div className="placeholderImage">Imagen no disponible</div>
+        )}
 
-        <div className="qualityCheckbox">
-          <input type="checkbox" id="quality" />
-          <label htmlFor="quality">Cumple con los Estándares de Calidad</label>
-        </div>
+        <h1 className="productName">{product.name}</h1>
+        <p className="productPrice">Precio: ${product.price}</p>
+        <p className="productDescription">{product.description}</p>
+        <p className="productStock">Stock disponible: {product.stock}</p>
+        <p className="productMeasure">Medida: {product.measure}</p>
+        <p className="deliveryTime">Estado: {product.status}</p>
 
-        {/* Sección de solicitudes del producto */}
-        <h2>Solicitudes del Producto</h2>
-        <div className="requestItem">
-          <p>Solicitud de Alexis Santana el 18 de Octubre de 2024</p>
-          <button onClick={() => router.push(`/detalleSolicitud/Alexis`)}>
-            Ver más
+        <h2>Información adicional</h2>
+        <p>Creado el: {new Date(product.createdAt).toLocaleString()}</p>
+        <p>Última actualización: {new Date(product.updatedAt).toLocaleString()}</p>
+
+        {/* Formulario para actualizar el producto */}
+        <h3>Actualizar Producto</h3>
+        <form>
+          <label>
+            Nombre:
+            <input
+              type="text"
+              name="name"
+              value={formData.name || ""}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Descripción:
+            <input
+              type="text"
+              name="description"
+              value={formData.description || ""}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Precio:
+            <input
+              type="number"
+              name="price"
+              value={formData.price || ""}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Stock:
+            <input
+              type="number"
+              name="stock"
+              value={formData.stock || ""}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Medida:
+            <input
+              type="text"
+              name="measure"
+              value={formData.measure || ""}
+              onChange={handleChange}
+            />
+          </label>
+          <button type="button" onClick={handleUpdateProduct}>
+            Actualizar Producto
           </button>
-        </div>
-        <div className="requestItem">
-          <p>Solicitud de Diego Armando el 17 de Octubre de 2024</p>
-          <button onClick={() => router.push(`/detalleSolicitud/Diego`)}>
-            Ver más
-          </button>
-        </div>
+        </form>
+
+        {/* Botón para eliminar el producto */}
+        <h3>Eliminar Producto</h3>
+        <button onClick={handleDeleteProduct}>Eliminar Producto</button>
+
+        {message && <p>{message}</p>}
       </div>
     </div>
   );

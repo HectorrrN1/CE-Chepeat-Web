@@ -125,3 +125,25 @@
     color: red; /* Color de error */
     margin-bottom: 10px; /* Espacio inferior para mensajes de error */
   }
+
+
+
+  .mapContainer {
+    width: 100%;
+    max-width: 400px; /* Limitar el ancho del mapa */
+    height: 400px; /* Altura fija del mapa */
+    margin-bottom: 20px; /* Espacio entre el mapa y los demás campos */
+    border: 1px solid #ccc; /* Bordear el mapa */
+    border-radius: 5px; /* Bordes redondeados */
+    overflow: hidden; /* Prevenir desbordamiento */
+  }
+  
+  .formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre el mapa y el formulario */
+    width: 100%;
+    max-width: 400px; /* Limitar el ancho del formulario */
+    margin: auto; /* Centrar horizontalmente */
+  }
+  

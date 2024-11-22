@@ -17,7 +17,7 @@
   justify-content: flex-start;
   background-color: white; /* Color de fondo del contenedor de detalles */
   padding: 30px; /* Espaciado interno */
-  border: 2px solid #df1c24; /* Borde alrededor del contenedor */
+  border: 2px solid #818181; /* Borde alrededor del contenedor */
   border-radius: 10px; /* Bordes redondeados */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar el contenedor */
   width: 90%; /* Ancho del contenedor */
@@ -105,5 +105,55 @@
 }
 
 .requestItem button:hover {
+  background-color: #c50f16;
+}
+
+
+
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.editForm label {
+  font-size: 1rem;
+  color: #333;
+}
+
+.editForm input,
+.editForm textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.editForm button {
+  padding: 10px 20px;
+  background-color: #1e7e34;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.deleteButton {
+  padding: 10px 20px;
+  background-color: #df1c24;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 20px;
+}
+
+.deleteButton:hover {
   background-color: #c50f16;
 }

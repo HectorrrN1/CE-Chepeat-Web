@@ -2,12 +2,24 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import './pageVenUbi.css';
+
+const mapContainerStyle = {
+  width: '100%',
+  height: '400px',
+};
+
+const center = {
+  lat: 19.4326, // Coordenadas iniciales (ejemplo: Ciudad de México)
+  lng: -99.1332,
+};
 
 const RegisterSellerPage = () => {
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
   const isSeller = localStorage.getItem('isSeller');
+
   const [formData, setFormData] = useState({
     storeName: '',
     description: '',
@@ -19,8 +31,12 @@ const RegisterSellerPage = () => {
     state: '',
     cp: '',
     addressNotes: '',
-    latitude: 0,
-    longitude: 0,
+    latitude: center.lat, // Valores iniciales
+    longitude: center.lng,
+  });
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: 'AIzaSyBRV9kd8IO4wAQIiABi45NIzczmweWEaOI', // Reemplaza con tu clave
   });
 
   const router = useRouter();
@@ -36,6 +52,14 @@ const RegisterSellerPage = () => {
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const handleMapClick = (event) => {
+    setFormData({
+      ...formData,
+      latitude: event.latLng.lat(),
+      longitude: event.latLng.lng(),
     });
   };
 
@@ -60,11 +84,6 @@ const RegisterSellerPage = () => {
         router.push('/login');
         return;
       }
-
-      console.log('Datos enviados al backend:', {
-        ...formData,
-        idUser: userId,
-      });
 
       const response = await fetch('https://backend-j959.onrender.com/api/Seller/AddUSeller', {
         method: 'POST',
@@ -91,17 +110,11 @@ const RegisterSellerPage = () => {
       }
 
       const data = await response.json();
-      console.log('Respuesta completa del servidor:', data);
-
       if (data.seller && data.seller.id) {
-        console.log('ID del vendedor registrado:', data.seller.id);
         localStorage.setItem('idSeller', data.seller.id);
         alert('Registro exitoso');
         localStorage.setItem('isSeller', 'true');
         router.push('/vendedorPages');
-      } else {
-        console.error('El servidor no devolvió el ID del vendedor.');
-        alert('Registro exitoso, pero no se recibió el ID del vendedor.');
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
@@ -109,28 +122,50 @@ const RegisterSellerPage = () => {
     }
   };
 
+  if (!isLoaded) {
+    return <div>Cargando mapa...</div>;
+  }
+
   return (
     <div className="container">
       <h2 className="title">Registro de Vendedor</h2>
-      <form onSubmit={handleSubmit} className="loginForm">
-        <input
-          type="text"
-          name="storeName"
-          value={formData.storeName}
-          onChange={handleChange}
-          placeholder="Nombre de la tienda"
-          required
-          className="inputField"
-        />
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Descripción"
-          required
-          className="textareaField"
-        />
-        <input
+      <div className="formContainer">
+        {/* Mapa */}
+        <div className="mapContainer">
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            zoom={14}
+            center={{ lat: formData.latitude, lng: formData.longitude }}
+            onClick={handleMapClick}
+          >
+            <Marker position={{ lat: formData.latitude, lng: formData.longitude }} />
+          </GoogleMap>
+        </div>
+        <div>
+          <p>Latitud: {formData.latitude}</p>
+          <p>Longitud: {formData.longitude}</p>
+        </div>
+        {/* Formulario */}
+        <form onSubmit={handleSubmit} className="loginForm">
+          <input
+            type="text"
+            name="storeName"
+            value={formData.storeName}
+            onChange={handleChange}
+            placeholder="Nombre de la tienda"
+            required
+            className="inputField"
+          />
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Descripción"
+            required
+            className="textareaField"
+          />
+
+<input
           type="text"
           name="street"
           value={formData.street}
@@ -197,8 +232,12 @@ const RegisterSellerPage = () => {
           placeholder="Notas sobre la dirección (opcional)"
           className="textareaField"
         />
-        <button type="submit" className="loginButton">Registrar</button>
-      </form>
+
+
+          {/* Campos restantes */}
+          <button type="submit" className="loginButton">Registrar</button>
+        </form>
+      </div>
     </div>
   );
 };
