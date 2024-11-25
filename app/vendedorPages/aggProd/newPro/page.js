@@ -86,7 +86,7 @@ export default function NewPro() {
 
   // Función para redirigir a la página "Mis productos"
   const goToMyProducts = () => {
-    router.push('/vendedorPages/aggProd');
+    router.push('/vendedorPages');
   };
 
   return (

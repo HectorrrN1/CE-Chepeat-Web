@@ -1,8 +1,10 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import './detallePro.css';
+import { useRouter } from 'next/navigation';
 
 export default function DetalleProPage() {
   const [product, setProduct] = useState(null);
@@ -10,6 +12,7 @@ export default function DetalleProPage() {
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   const pathname = usePathname();
   const productId = decodeURIComponent(pathname.split('/').pop()); // Obtiene el ID del producto desde la URL
@@ -100,6 +103,7 @@ export default function DetalleProPage() {
       const data = await response.json();
       setMessage(data.result || "Producto eliminado exitosamente.");
       setProduct(null); // Limpia los detalles del producto después de eliminarlo
+      router.push('/vendedorPages'); // Redirigir al listado de productos
     } catch (err) {
       setMessage(err.message || "Error al eliminar el producto.");
     }
@@ -126,17 +130,26 @@ export default function DetalleProPage() {
         ) : (
           <div className="placeholderImage">Imagen no disponible</div>
         )}
+<h1 className="productName">{product?.name || 'Nombre no disponible'}</h1>
+<p className="productPrice">Precio: ${product?.price || 'No disponible'}</p>
+<p className="productDescription">{product?.description || 'Descripción no disponible'}</p>
+<p className="productStock">Stock disponible: {product?.stock || 0}</p>
+<p className="productMeasure">Medida: {product?.measure || 'No especificada'}</p>
+<p className="deliveryTime">Estado: {product?.status || 'No especificado'}</p>
 
-        <h1 className="productName">{product.name}</h1>
-        <p className="productPrice">Precio: ${product.price}</p>
-        <p className="productDescription">{product.description}</p>
-        <p className="productStock">Stock disponible: {product.stock}</p>
-        <p className="productMeasure">Medida: {product.measure}</p>
-        <p className="deliveryTime">Estado: {product.status}</p>
 
-        <h2>Información adicional</h2>
-        <p>Creado el: {new Date(product.createdAt).toLocaleString()}</p>
-        <p>Última actualización: {new Date(product.updatedAt).toLocaleString()}</p>
+<h2>Información adicional</h2>
+<p>
+  Creado el: {product?.createdAt 
+    ? new Date(product.createdAt).toLocaleString() 
+    : 'Fecha no disponible'}
+</p>
+<p>
+  Última actualización: {product?.updatedAt 
+    ? new Date(product.updatedAt).toLocaleString() 
+    : 'Fecha no disponible'}
+</p>
+
 
         {/* Formulario para actualizar el producto */}
         <h3>Actualizar Producto</h3>
@@ -199,4 +212,4 @@ export default function DetalleProPage() {
       </div>
     </div>
   );
-}
+} 

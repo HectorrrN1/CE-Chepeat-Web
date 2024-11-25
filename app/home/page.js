@@ -1,24 +1,68 @@
-// Page.js
 "use client";
 
-import React, { useState } from 'react';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
-import styles from '../page.module.css';
-import '../globals.css';
-import Sidebar from '../Sidebar'; 
-import { useRouter } from 'next/navigation';  
-import RealTimeMap from '../RealTimeMap'; 
+import React, { useState, useEffect } from "react";
+import Navbar from "../Navbar";
+import Footer from "../Footer";
+import styles from "../page.module.css";
+import "../globals.css";
+import Sidebar from "../Sidebar";
+import { useRouter } from "next/navigation";
+import RealTimeMap from "../RealTimeMap";
 
 const Page = () => {
   const [showModal, setShowModal] = useState(true);
+  const [products, setProducts] = useState([]); // Estado para almacenar los productos
+  const [loading, setLoading] = useState(false); // Estado para manejar la carga
+  const [error, setError] = useState(null); // Estado para manejar errores
   const router = useRouter();
+  
 
+  // Función para obtener productos
+  const fetchProducts = async (latitude, longitude, radiusKm = 1) => {
+    setLoading(true);
+    setError(null);
+
+    // Recuperar el token del localStorage
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch("https://backend-j959.onrender.com/api/Product/GetProductsByRadius", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Agregar el token de autorización
+        },
+        body: JSON.stringify({
+          latitude,
+          longitude,
+          radiusKm,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorDetails = await response.text();
+        console.error("Detalles del error:", errorDetails);
+        throw new Error("Error al obtener productos.");
+      }
+
+      const data = await response.json();
+      setProducts(data); // Actualiza los productos en el estado
+    } catch (error) {
+      console.error("Error:", error);
+      setError("No se pudieron cargar los productos.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Manejar permiso de ubicación
   const handleLocationPermission = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log("Ubicación obtenida:", position);
+          const { latitude, longitude } = position.coords;
+          console.log("Ubicación obtenida:", latitude, longitude);
+          fetchProducts(latitude, longitude, 1); // Busca productos en un radio de 1 km
           setShowModal(false); // Cierra el modal después de obtener la ubicación
         },
         (error) => {
@@ -32,18 +76,21 @@ const Page = () => {
     }
   };
 
-  const handleSeeMore = () => {
-    router.push(`/product`);
+  // Manejar redirección al ver más
+  const handleSeeMore = (productId) => {
+    router.push(`/product/${productId}`); // Redirige a los detalles del producto
   };
 
   return (
     <div className={styles.pageContainer}>
-      
       {showModal && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h2>¿Ves resultados más cerca de ti?</h2>
-            <p>Para obtener los resultados más cercanos, permita que la aplicación use la ubicación precisa de su dispositivo.</p>
+            <p>
+              Para obtener los resultados más cercanos, permita que la aplicación use la ubicación precisa de su
+              dispositivo.
+            </p>
             <div className={styles.modalButtons}>
               <button onClick={handleLocationPermission} className={styles.locationButton}>
                 Utilice una ubicación precisa
@@ -56,14 +103,10 @@ const Page = () => {
         </div>
       )}
 
-     {/*<Navbar />*/}
-    
       <div className={styles.mainLayout}>
-      <Sidebar /> {/* Sidebar al lado izquierdo */}
-
+        <Sidebar />
         <div className={styles.content}>
           <div className={styles.mapSection}>
-           
             <RealTimeMap /> {/* Componente del mapa en tiempo real */}
           </div>
 
@@ -75,47 +118,24 @@ const Page = () => {
           </div>
 
           <div className={styles.productGrid}>
-            <div className={styles.productCard}>
-              <img src="/imagenes/pasta.jpg" alt="Pasta Italiana" />
-              <h3>Pasta Italiana</h3>
-              <p>$12.99</p>
-              <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
-            </div>
-            <div className={styles.productCard}>
-              <img src="/imagenes/hamburguesa.jpg" alt="Hamburguesa Clásica" />
-              <h3>Hamburguesa Clásica</h3>
-              <p>$9.99</p>
-              <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
-            </div>
-            <div className={styles.productCard}>
-              <img src="/imagenes/Vegetable-Sandwich.jpg" alt="Sushi Variado" />
-              <h3>Vegetarian Delight Sandwich</h3>
-              <p>$50.00</p>
-              <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
-            </div>
-
-            <div className={styles.productCard}>
-              <img src="/imagenes/tacos.jpg" alt="Tacos al pastor" />
-              <h3>4 Tacos al pastor</h3>
-              <p>$30.00</p>
-              <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
-            </div>
-
-            <div className={styles.productCard}>
-              <img src="/imagenes/tarta.avif" alt="Tarta de Frutas" />
-              <h3>Tarta de Frutas</h3>
-              <p>$15.00</p>
-              <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
-            </div>
-            <div className={styles.productCard}>
-              <img src="/imagenes/croissant.jpg" alt="Croissant de Mantequilla" />
-              <h3>Croissant de Mantequilla</h3>
-              <p>$2.99</p>
-              <button onClick={handleSeeMore} className={styles.button}>Ver más</button>
-            </div>
-
-
-            
+            {loading ? (
+              <p>Cargando productos...</p>
+            ) : error ? (
+              <p>{error}</p>
+            ) : products.length > 0 ? (
+              products.map((product) => (
+                <div key={product.id} className={styles.productCard}>
+                  <img src={product.image} alt={product.name} />
+                  <h3>{product.name}</h3>
+                  <p>${product.price}</p>
+                  <button onClick={() => handleSeeMore(product.id)} className={styles.button}>
+                    Ver más
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p>No hay productos disponibles en tu área.</p>
+            )}
           </div>
         </div>
       </div>
