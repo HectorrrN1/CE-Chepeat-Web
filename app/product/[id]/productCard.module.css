@@ -44,13 +44,19 @@
   }
   
   .productTitle {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: bold;
+    color: #000000;
+    margin-bottom: 15px;
   }
+
+
   
   .productPrice {
     font-size: 18px;
     font-weight: bold;
+    color: #19953f;
+    margin-bottom: 15px;
   }
   
   .badge {
@@ -72,7 +78,7 @@
   .location {
     margin-bottom: 10px;
     color: #666;
-    font-size: 22px;
+    font-size: 20px;
   }
   
   .commentsBox {
@@ -108,6 +114,38 @@
 
 
 
+  /* Estilo del estado del producto */
+  .sellerDetails{
+    font-size: 22px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 15px;
+  
+    
+  
+  }
+
+
+  
+  /* Estilo del estado del producto titulo */
+  .sellerDetailsT{
+    font-size: 22px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 15px;
+    text-align: center;
+    
+  
+  }
+ /* Estilo del estado del producto */
+ .sellerName{
+  font-size: 22px;
+  font-weight: bold;
+  color: #e62626;
+  margin-bottom: 15px;
+
+}
+
 /* Estilo del stock del producto */
 .productStock{
   font-size: 22px;
@@ -115,6 +153,20 @@
   color: #666;
   margin-bottom: 15px;
 
+}
+ /* Estilo de la calificacion del vendedor */
+ .calificacion{
+  font-size: 22px;
+  font-weight: bold;
+  color: #f3a633;
+  margin-bottom: 15px;
+ }
+
+.referencia {
+  font-size: 20px;
+  font-weight: bold;
+  color: #797878;
+  margin-bottom: 15px;
 }
   
   .buyButton {

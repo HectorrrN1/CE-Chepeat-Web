@@ -7,52 +7,117 @@ import Sidebar from './SidebarVen';
 
 export default function VendedorPage() {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [requests, setRequests] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [loadingRequests, setLoadingRequests] = useState(true);
+  const [errorProducts, setErrorProducts] = useState(null);
+  const [errorRequests, setErrorRequests] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     const storedIdSeller = localStorage.getItem('idSeller');
 
-    if (storedToken && storedIdSeller) {
-      fetchProductsBySeller(storedToken, storedIdSeller).then((result) => {
-        if (result.success) {
-          setProducts(result.data);
-        } else {
-          setError(result.error);
-        }
-        setLoading(false);
-      });
-    } else {
-      setError('No se encontraron las credenciales necesarias. Por favor, inicia sesión nuevamente.');
-      setLoading(false);
+    if (!storedToken || !storedIdSeller) {
+      setErrorProducts('Credenciales no encontradas. Por favor, inicia sesión nuevamente.');
+      setErrorRequests('Credenciales no encontradas. Por favor, inicia sesión nuevamente.');
+      setLoadingProducts(false);
+      setLoadingRequests(false);
+      return;
     }
+
+    // Cargar productos
+    fetchProductsBySeller(storedToken, storedIdSeller).then((result) => {
+      if (result.success) {
+        setProducts(result.data);
+      } else {
+        setErrorProducts(result.error || 'Error al cargar los productos.');
+      }
+      setLoadingProducts(false);
+    });
+
+    // Cargar solicitudes de compra
+    fetchRequestsBySeller(storedIdSeller, storedToken).then((result) => {
+      if (result.success) {
+        setRequests(result.data);
+      } else {
+        setErrorRequests(result.error || 'Error al cargar las solicitudes.');
+      }
+      setLoadingRequests(false);
+    });
   }, []);
 
-  const handleProductClick = (productId) => {
-    router.push(`/vendedorPages/detallePro/${productId}`); // Navega a la página de detalles del producto
+  // Función para obtener solicitudes del vendedor
+  const fetchRequestsBySeller = async (idSeller, token) => {
+    try {
+      const response = await fetch('https://backend-j959.onrender.com/api/PurchaseRequest/GetRequestsBySeller', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(idSeller),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return { success: true, data };
+      } else {
+        const error = await response.json();
+        return { success: false, error: error.message };
+      }
+    } catch (err) {
+      return { success: false, error: 'Error al cargar las solicitudes.' };
+    }
+  };
+
+  // Manejar Aceptar y Cancelar solicitud
+  const handleRequestAction = async (requestId, action) => {
+    const endpoint =
+      action === 'accept'
+        ? 'https://backend-j959.onrender.com/api/PurchaseRequest/AcceptRequest'
+        : 'https://backend-j959.onrender.com/api/PurchaseRequest/CancelRequest';
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(requestId),
+      });
+
+      if (response.ok) {
+        setRequests((prevRequests) => prevRequests.filter((request) => request.id !== requestId));
+        alert(`Solicitud ${action === 'accept' ? 'aceptada' : 'cancelada'} con éxito.`);
+      } else {
+        const error = await response.json();
+        alert(`Error al ${action === 'accept' ? 'aceptar' : 'cancelar'} la solicitud: ${error.message}`);
+      }
+    } catch {
+      alert(`Error al ${action === 'accept' ? 'aceptar' : 'cancelar'} la solicitud.`);
+    }
   };
 
   return (
     <div className="pageContainer">
-      <Sidebar /> {/* Barra lateral */}
+      <Sidebar />
 
       <div className="contentArea">
+        {/* Sección de productos */}
         <h1 className="title">Mis productos</h1>
 
-        {loading && <p>Cargando productos...</p>}
-        {error && <p className="error">{error}</p>}
-
-        {!loading && !error && products.length === 0 && <p>No tienes productos registrados.</p>}
-
-        {!loading && !error && products.length > 0 && (
+        {loadingProducts && <p>Cargando productos...</p>}
+        {errorProducts && <p className="error">{errorProducts}</p>}
+        {!loadingProducts && !errorProducts && products.length === 0 && <p>No tienes productos registrados.</p>}
+        {!loadingProducts && !errorProducts && products.length > 0 && (
           <div className="productList">
             {products.map((product) => (
               <div
                 key={product.id}
                 className="productItem"
-                onClick={() => handleProductClick(product.id)} // Al hacer clic, redirige al detalle del producto
+                onClick={() => router.push(`/vendedorPages/detallePro/${product.id}`)}
               >
                 <img src={product.imagenUrl} alt={product.name} className="productImage" />
                 <h3>{product.name}</h3>
@@ -71,19 +136,34 @@ export default function VendedorPage() {
         {/* Sección de solicitudes de productos */}
         <div className="requestSection">
           <h2 className="sectionTitle">Solicitudes de productos</h2>
-          <div className="requestItem">
-            <p>"Juan Pablo quiere comprar un pan"</p>
-            <span className="timestamp">Hace 2 horas</span>
-          </div>
-        </div>
 
-        {/* Sección de historial de compras */}
-        <div className="historySection">
-          <h2 className="sectionTitle">Historial de compras</h2>
-          <div className="historyItem">
-            <p>"Michael Brown compró verduras"</p>
-            <span className="timestamp">Hace 1 día</span>
-          </div>
+          {loadingRequests && <p>Cargando solicitudes...</p>}
+          {errorRequests && <p className="error">{errorRequests}</p>}
+          {!loadingRequests && !errorRequests && requests.length === 0 && <p>No tienes solicitudes de productos.</p>}
+          {!loadingRequests && !errorRequests && requests.length > 0 && (
+            <div className="requestList">
+              {requests.map((request) => (
+                <div key={request.id} className="requestItem">
+                  <p>{request.buyerName} quiere comprar {request.productName}</p>
+                  <span className="timestamp">{request.timestamp}</span>
+                  <div className="actionButtons">
+                    <button
+                      className="acceptButton"
+                      onClick={() => handleRequestAction(request.id, 'accept')}
+                    >
+                      Aceptar
+                    </button>
+                    <button
+                      className="cancelButton"
+                      onClick={() => handleRequestAction(request.id, 'cancel')}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
