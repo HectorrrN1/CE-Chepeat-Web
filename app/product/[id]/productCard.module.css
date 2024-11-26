@@ -1,0 +1,316 @@
+.productCardContainer {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  
+  .imageContainer {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .productImage {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .productDetails {
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .productTitle {
+    font-size: 22px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 15px;
+  }
+
+
+  
+  .productPrice {
+    font-size: 18px;
+    font-weight: bold;
+    color: #19953f;
+    margin-bottom: 15px;
+  }
+  
+  .badge {
+    display: inline-block;
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  
+  .productDescription {
+    margin: 10px 0;
+    font-size: 22px;
+    color: #666;
+  }
+  
+  .location {
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 20px;
+  }
+  
+  .commentsBox {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    resize: none;
+  }
+  
+  .purchaseSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .totalPrice {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+
+
+  /* Estilo del estado del producto */
+.productStatus{
+  font-size: 22px;
+  font-weight: bold;
+  color: #19953f;
+  margin-bottom: 15px;
+
+}
+
+
+
+  /* Estilo del estado del producto */
+  .sellerDetails{
+    font-size: 22px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 15px;
+  
+    
+  
+  }
+
+
+  
+  /* Estilo del estado del producto titulo */
+  .sellerDetailsT{
+    font-size: 22px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 15px;
+    text-align: center;
+    
+  
+  }
+ /* Estilo del estado del producto */
+ .sellerName{
+  font-size: 22px;
+  font-weight: bold;
+  color: #e62626;
+  margin-bottom: 15px;
+
+}
+
+/* Estilo del stock del producto */
+.productStock{
+  font-size: 22px;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 15px;
+
+}
+ /* Estilo de la calificacion del vendedor */
+ .calificacion{
+  font-size: 22px;
+  font-weight: bold;
+  color: #f3a633;
+  margin-bottom: 15px;
+ }
+
+.referencia {
+  font-size: 20px;
+  font-weight: bold;
+  color: #797878;
+  margin-bottom: 15px;
+}
+  
+  .buyButton {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .button {
+    padding: 0.5rem 1rem;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  
+  .button:hover {
+    background-color: red;
+  }
+  
+  .stars {
+    display: flex;
+    justify-content: center;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .star {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #ccc;
+  }
+  
+  .star.active {
+    color: gold;
+  }
+  
+
+
+
+
+  /* Estilo de la caja de comentarios */
+.textarea {
+  width: 100%;
+  height: 80px;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 1rem;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+/* Enfoque de la caja de comentarios */
+.textarea:focus {
+  border-color: red;
+  box-shadow: 0 0 5px rgba(0, 112, 243, 0.2);
+}
+
+/* Estilo para el modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.stars {
+  margin: 1rem 0;
+}
+
+.star {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.active {
+  color: #ffcc00;
+}
+
+.button {
+  background-color: red;
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: red;
+}
+
+/* Estilo para el botón de "Recibí el producto" */
+.modalContent button {
+  margin-top: 1rem;
+}
+
+

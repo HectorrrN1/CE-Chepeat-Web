@@ -1,0 +1,12 @@
+.mapContainer {
+    width: 100%;  /* Para que el mapa se ajuste al ancho de su contenedor */
+    height: 400px;  /* Ajusta esta altura según sea necesario */
+    position: relative; /* Asegúrate de que el contenedor tenga un posicionamiento relativo */
+  }
+  
+  .leaflet-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  

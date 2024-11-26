@@ -1,0 +1,111 @@
+/* Contenedor de los productos */
+.myProductsContainer {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.myProductsContainer h1 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #333;
+}
+
+/* Contenedor de los productos */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Ajustado a columnas de 220px */
+  gap: 20px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Tarjeta de cada producto */
+.product-card {
+  border: 1px solid #e1e1e1;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Sombra más fuerte */
+  background-color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación al pasar el mouse */
+}
+
+/* Efecto hover sobre la tarjeta del producto */
+.product-card:hover {
+  transform: translateY(-10px); /* Eleva la tarjeta al pasar el mouse */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Sombra más fuerte al pasar el mouse */
+}
+
+/* Imagen del producto */
+.product-image {
+  max-width: 100%;
+  height: 200px; /* Tamaño consistente para las imágenes */
+  border-radius: 8px; /* Bordes redondeados más suaves */
+  margin-bottom: 15px;
+  object-fit: cover; /* Mantiene la imagen dentro de los límites sin distorsionarla */
+}
+
+/* Nombre del producto */
+.product-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Descripción del producto */
+.product-card p {
+  font-size: 0.9rem;
+  color: #777;
+  line-height: 1.4;
+  margin-bottom: 15px;
+}
+
+/* Precio del producto */
+.product-card p strong {
+  font-weight: 700;
+  color: #1e7e34; /* Verde para denotar el precio */
+}
+
+/* Stock y medida */
+.product-card p:last-child {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* Botón o acción sobre el producto */
+.product-card button {
+  padding: 10px 20px;
+  background-color: #1e7e34;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.product-card button:hover {
+  background-color: #155d27; /* Color más oscuro al pasar el mouse */
+}
+
+/* Para manejar las pantallas pequeñas */
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Aumenta el número de columnas en pantallas más pequeñas */
+    padding: 15px;
+  }
+
+  .product-card {
+    padding: 15px;
+  }
+}
+
+/* Estilo para el mensaje de error */
+.error {
+  color: red;
+  font-size: 1.1rem;
+  margin-top: 20px;
+  text-align: center;
+}

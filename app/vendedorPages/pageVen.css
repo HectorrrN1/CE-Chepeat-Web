@@ -1,0 +1,223 @@
+/* Contenedor principal */
+.pageContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px; /* Ajusta el tamaño del sidebar según sea necesario */
+  background-color: #333; /* Color de fondo del sidebar */
+  color: white; /* Color del texto del sidebar */
+  height: 100vh; /* Asegura que el sidebar ocupe toda la altura de la pantalla */
+  padding: 20px;
+  position: fixed; /* Fija el sidebar a la izquierda */
+}
+
+/* Área de contenido */
+.contentArea {
+  margin-left: 250px; /* Desplaza el contenido hacia la derecha para no cubrir el sidebar */
+  padding: 20px;
+  width: calc(100% - 250px); /* Asegura que el contenido ocupe el espacio restante */
+  box-sizing: border-box;
+  max-width: 1200px; /* O cualquier otro límite de ancho que desees */
+  margin: 0 auto; /* Centra el contenido dentro de la página */
+}
+
+/* Título */
+.title {
+  font-size: 28px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+/* Lista de productos */
+.productList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto; /* Centra la lista de productos */
+}
+
+/* Estilo de cada producto */
+.productItem {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.productItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para las imágenes de los productos */
+.productImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+/* Botón para agregar productos */
+.addButton {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #df1c24;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: background-color 0.3s;
+  display: block;
+  margin-left: auto;
+  margin-right: auto; /* Centra el botón */
+}
+
+
+/* Botón para aceptar solicitud */
+.cancelButton {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #df1c24;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: background-color 0.3s;
+
+ 
+ 
+}
+
+/* Botón para aceptar solicitud */
+.acceptButton {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #2cdf44;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  transition: background-color 0.3s;
+ 
+ 
+}
+
+
+
+
+
+.addButton:hover {
+  background-color: #c50f16;
+}
+
+/* Sección de solicitudes de productos */
+.requestSection,
+.historySection {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 40px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 0 auto; /* Centra las secciones */
+}
+
+/* Footer */
+.footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+
+
+
+
+/* Sección de solicitudes de productos */
+.requestSection {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 40px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.requestItem {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-left: 5px solid #df1c24;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+}
+
+/* Sección de historial de compras */
+.historySection {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 40px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.historyItem {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-left: 5px solid #333;
+}
+
+/* Footer */
+.footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.error {
+  color: red;
+  margin-bottom: 10px;
+}
+
+
+
+
+
+
+
+

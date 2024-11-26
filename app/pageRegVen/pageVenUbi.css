@@ -1,0 +1,149 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Mantener el contenedor lleno de altura de la ventana */
+    padding: 20px;
+    background-color: #f5f5f5; /* Fondo de la página */
+  }
+  
+  .logo img {
+    width: 100%; /* Asegurar que la imagen ocupe todo el ancho disponible */
+    max-width: 120px; /* Limitar el ancho máximo de la imagen */
+    height: auto; /* Mantener la relación de aspecto */
+    margin-bottom: 20px; /* Espacio inferior para separar de otros elementos */
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 10px; /* Espacio entre el título y la descripción */
+    color: #333; /* Color del título */
+    text-align: center; /* Centrar el título */
+  }
+  
+  .description {
+    font-size: 16px;
+    margin-bottom: 20px; /* Espacio entre la descripción y el dropdown */
+    color: #555; /* Color de la descripción */
+    text-align: center; /* Centrar la descripción */
+  }
+  
+  .dropdownContainer {
+    width: 100%;
+    max-width: 400px; /* Asegurar que el dropdown no sea más ancho que esto */
+    margin-bottom: 20px; /* Espacio entre el dropdown y el formulario */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinear a la izquierda */
+  }
+  
+  .label {
+    font-size: 16px;
+    color: #333; /* Color de la etiqueta */
+    margin-bottom: 5px; /* Espacio entre la etiqueta y el dropdown */
+  }
+  
+  
+  .loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espacio entre los campos del formulario */
+    width: 100%;
+    max-width: 400px; /* Limitar el ancho del formulario */
+  }
+  
+  .inputField,
+  .textareaField {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff; /* Fondo blanco para los campos de entrada */
+    color: #333; /* Color de texto negro */
+  }
+  
+  .inputField:focus,
+  .textareaField:focus {
+    border-color: #df1c24; /* Cambiar el color del borde al enfocar */
+    outline: none; /* Eliminar el contorno predeterminado */
+  }
+  
+  .checkboxContainer {
+    display: flex;
+    align-items: center;
+    margin: 10px 0; /* Margen entre la caja de verificación y otros elementos */
+  }
+  
+  .checkboxContainer input {
+    margin-right: 5px; /* Espacio a la derecha de la caja de verificación */
+    cursor: pointer; /* Cambiar cursor a pointer */
+  }
+  
+  .checkboxContainer label {
+    color: #333; /* Color del texto de los términos y condiciones */
+  }
+  
+  .loginButton {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #df1c24; /* Color del botón */
+    color: #fff; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar cursor a pointer */
+    width: 100%; /* Botón ocupa todo el ancho disponible */
+  }
+  
+  .loginButton:hover {
+    opacity: 0.8; /* Efecto de hover en el botón */
+  }
+  
+  .footer {
+    margin-top: 20px; /* Espacio superior entre el contenido y el pie de página */
+    text-align: center; /* Centrar texto del pie de página */
+    font-size: 14px; /* Tamaño de fuente para el pie de página */
+  }
+  
+  .footerLinks {
+    display: flex;
+    justify-content: center; /* Centrar los enlaces en el pie de página */
+    gap: 10px; /* Espacio entre los enlaces */
+    margin-top: 10px; /* Espacio entre el contenido y el pie de página */
+  }
+  
+  .link {
+    color: #df1c24; /* Color de los enlaces */
+    text-decoration: none; /* Sin subrayado */
+  }
+  
+  .link:hover {
+    text-decoration: underline; /* Subrayar en hover */
+  }
+  
+  .error {
+    color: red; /* Color de error */
+    margin-bottom: 10px; /* Espacio inferior para mensajes de error */
+  }
+
+
+
+  .mapContainer {
+    width: 100%;
+    max-width: 400px; /* Limitar el ancho del mapa */
+    height: 400px; /* Altura fija del mapa */
+    margin-bottom: 20px; /* Espacio entre el mapa y los demás campos */
+    border: 1px solid #ccc; /* Bordear el mapa */
+    border-radius: 5px; /* Bordes redondeados */
+    overflow: hidden; /* Prevenir desbordamiento */
+  }
+  
+  .formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre el mapa y el formulario */
+    width: 100%;
+    max-width: 400px; /* Limitar el ancho del formulario */
+    margin: auto; /* Centrar horizontalmente */
+  }
+  
