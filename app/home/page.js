@@ -11,18 +11,18 @@ import RealTimeMap from "../RealTimeMap";
 
 const Page = () => {
   const [showModal, setShowModal] = useState(true);
-  const [products, setProducts] = useState([]); // Estado para almacenar los productos
-  const [loading, setLoading] = useState(false); // Estado para manejar la carga
-  const [error, setError] = useState(null); // Estado para manejar errores
+  const [products, setProducts] = useState([]); // Estado para los productos
+  const [requests, setRequests] = useState([]); // Estado para las solicitudes
+  const [loading, setLoading] = useState(false); // Estado de carga para productos
+  const [loadingRequests, setLoadingRequests] = useState(false); // Estado de carga para solicitudes
+  const [error, setError] = useState(null); // Estado de error para productos
+  const [errorRequests, setErrorRequests] = useState(null); // Estado de error para solicitudes
   const router = useRouter();
-  
 
   // Función para obtener productos
   const fetchProducts = async (latitude, longitude, radiusKm = 1) => {
     setLoading(true);
     setError(null);
-
-    // Recuperar el token del localStorage
     const token = localStorage.getItem("token");
 
     try {
@@ -30,28 +30,45 @@ const Page = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Agregar el token de autorización
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          latitude,
-          longitude,
-          radiusKm,
-        }),
+        body: JSON.stringify({ latitude, longitude, radiusKm }),
       });
 
-      if (!response.ok) {
-        const errorDetails = await response.text();
-        console.error("Detalles del error:", errorDetails);
-        throw new Error("Error al obtener productos.");
-      }
-
+      if (!response.ok) throw new Error("Error al obtener productos.");
       const data = await response.json();
-      setProducts(data); // Actualiza los productos en el estado
+      setProducts(data);
     } catch (error) {
-      console.error("Error:", error);
       setError("No se pudieron cargar los productos.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Función para obtener solicitudes
+  const fetchRequests = async () => {
+    setLoadingRequests(true);
+    setErrorRequests(null);
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    try {
+      const response = await fetch("https://backend-j959.onrender.com/api/PurchaseRequest/GetRequestsByBuyer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(userId),
+      });
+
+      if (!response.ok) throw new Error("Error al obtener solicitudes.");
+      const data = await response.json();
+      setRequests(data);
+    } catch (error) {
+      setErrorRequests("No se pudieron cargar las solicitudes.");
+    } finally {
+      setLoadingRequests(false);
     }
   };
 
@@ -61,25 +78,19 @@ const Page = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log("Ubicación obtenida:", latitude, longitude);
-          fetchProducts(latitude, longitude, 1); // Busca productos en un radio de 1 km
-          setShowModal(false); // Cierra el modal después de obtener la ubicación
+          fetchProducts(latitude, longitude, 1);
+          setShowModal(false);
         },
-        (error) => {
-          console.error("Error al obtener la ubicación:", error);
-          setShowModal(false); // Cierra el modal si el usuario rechaza la solicitud
-        }
+        () => setShowModal(false)
       );
     } else {
-      console.error("La geolocalización no está soportada en este navegador.");
       setShowModal(false);
     }
   };
 
-  // Manejar redirección al ver más
-  const handleSeeMore = (productId) => {
-    router.push(`/product/${productId}`); // Redirige a los detalles del producto
-  };
+  useEffect(() => {
+    fetchRequests(); // Obtener las solicitudes al cargar la página
+  }, []);
 
   return (
     <div className={styles.pageContainer}>
@@ -107,7 +118,7 @@ const Page = () => {
         <Sidebar />
         <div className={styles.content}>
           <div className={styles.mapSection}>
-            <RealTimeMap /> {/* Componente del mapa en tiempo real */}
+            <RealTimeMap />
           </div>
 
           <div className={styles.discountSection}>
@@ -128,7 +139,7 @@ const Page = () => {
                   <img src={product.image} alt={product.name} />
                   <h3>{product.name}</h3>
                   <p>${product.price}</p>
-                  <button onClick={() => handleSeeMore(product.id)} className={styles.button}>
+                  <button onClick={() => router.push(`/product/${product.id}`)} className={styles.button}>
                     Ver más
                   </button>
                 </div>
@@ -137,6 +148,33 @@ const Page = () => {
               <p>No hay productos disponibles en tu área.</p>
             )}
           </div>
+
+          <div className={styles.requestsSection}>
+  <h2>Mis solicitudes</h2>
+  {loadingRequests ? (
+    <p>Cargando solicitudes...</p>
+  ) : errorRequests ? (
+    <p>{errorRequests}</p>
+  ) : requests.length > 0 ? (
+    <div className={styles.requestsGrid}>
+      {requests.map((request) => (
+        <div key={request.id} className={styles.requestCard}>
+          <h3>{request.productName}</h3>
+          <p>Fecha: {new Date(request.requestDate).toLocaleDateString()}</p>
+  
+          <span className={styles[request.status.toLowerCase()]}>
+            {request.status === "APPROVED" && "Aprobada"}
+            {request.status === "PENDING" && "Pendiente"}
+            {request.status === "REJECTED" && "Rechazada"}
+          </span>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p>No has realizado ninguna solicitud.</p>
+  )}
+</div>
+
         </div>
       </div>
     </div>

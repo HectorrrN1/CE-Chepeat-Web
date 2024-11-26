@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Importar useRouter para redirigir
+import { useRouter } from 'next/navigation';
 import './newPro.css';
 
 export default function NewPro() {
   const [image, setImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
@@ -14,7 +15,7 @@ export default function NewPro() {
   const [idSeller, setIdSeller] = useState('');
   const [token, setToken] = useState('');
   const [products, setProducts] = useState([]);
-  const router = useRouter(); // Instanciar el router
+  const router = useRouter();
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -23,7 +24,6 @@ export default function NewPro() {
     if (storedToken && storedIdSeller) {
       setToken(storedToken);
       setIdSeller(storedIdSeller);
-      console.log('Token e idSeller obtenidos:', storedToken, storedIdSeller);
     } else {
       console.error('Token o idSeller no disponibles en localStorage.');
     }
@@ -32,6 +32,45 @@ export default function NewPro() {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setImage(URL.createObjectURL(file));
+    setImageFile(file); // Guardar el archivo de imagen para enviarlo al endpoint
+  };
+
+  const uploadImageToFirebase = async () => {
+    if (!imageFile || !name) {
+      alert('Por favor, selecciona una imagen y asigna un nombre al producto.');
+      return null;
+    }
+
+
+    
+    const formData = new FormData();
+    formData.append('Image', imageFile);
+    formData.append('ImageId', name);
+
+    try {
+      const response = await fetch(
+        'https://images-o944.onrender.com/api/Image/UploadImage',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.numError === 0) {
+        console.log('Imagen subida con éxito:', data.path);
+        return data.path; // Retornar el enlace de la imagen
+      } else {
+        console.error('Error al subir la imagen:', data.message);
+        alert('Error al subir la imagen. Por favor, inténtalo de nuevo.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error al subir la imagen:', error);
+      alert('Hubo un error al intentar subir la imagen.');
+      return null;
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -43,6 +82,9 @@ export default function NewPro() {
       return;
     }
 
+    const imagePath = await uploadImageToFirebase(); // Subir la imagen y obtener su path
+    if (!imagePath) return;
+
     const productData = {
       name,
       price,
@@ -50,19 +92,23 @@ export default function NewPro() {
       measure,
       description,
       idSeller,
+      imagePath, // Agregar el path de la imagen al modelo
     };
 
     try {
       console.log('Datos del producto a enviar:', productData);
 
-      const response = await fetch('https://backend-j959.onrender.com/api/Product/AddProduct', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(productData),
-      });
+      const response = await fetch(
+        'https://backend-j959.onrender.com/api/Product/AddProduct',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(productData),
+        }
+      );
 
       if (response.ok) {
         console.log('Producto agregado exitosamente');
@@ -74,6 +120,7 @@ export default function NewPro() {
         setMeasure('');
         setDescription('');
         setImage(null);
+        setImageFile(null);
       } else {
         console.error('Error al agregar el producto');
         alert('Hubo un error al agregar el producto. Por favor, inténtalo de nuevo.');
@@ -84,7 +131,6 @@ export default function NewPro() {
     }
   };
 
-  // Función para redirigir a la página "Mis productos"
   const goToMyProducts = () => {
     router.push('/vendedorPages');
   };
@@ -157,12 +203,11 @@ export default function NewPro() {
         />
 
         <button type="submit">Agregar producto</button>
-      </form>
 
-      {/* Botón para redirigir a "Mis productos" */}
-      <button className="myProductsButton" onClick={goToMyProducts}>
-        Mis productos
-      </button>
+        <button className="myProductsButton" onClick={goToMyProducts}>
+          Mis productos
+        </button>
+      </form>
     </div>
   );
 }

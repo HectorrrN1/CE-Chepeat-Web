@@ -87,6 +87,42 @@
   margin-right: auto; /* Centra el botón */
 }
 
+
+/* Botón para aceptar solicitud */
+.cancelButton {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #df1c24;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: background-color 0.3s;
+
+ 
+ 
+}
+
+/* Botón para aceptar solicitud */
+.acceptButton {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #2cdf44;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  transition: background-color 0.3s;
+ 
+ 
+}
+
+
+
+
+
 .addButton:hover {
   background-color: #c50f16;
 }

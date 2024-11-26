@@ -76,8 +76,8 @@ export default function VendedorPage() {
     const endpoint =
       action === 'accept'
         ? 'https://backend-j959.onrender.com/api/PurchaseRequest/AcceptRequest'
-        : 'https://backend-j959.onrender.com/api/PurchaseRequest/CancelRequest';
-
+        : 'https://backend-j959.onrender.com/api/PurchaseRequest/Reject';
+  
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -85,20 +85,23 @@ export default function VendedorPage() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
+        // Envía el ID como un string en el cuerpo
         body: JSON.stringify(requestId),
       });
-
+  
       if (response.ok) {
+        // Filtra la solicitud cancelada de la lista
         setRequests((prevRequests) => prevRequests.filter((request) => request.id !== requestId));
-        alert(`Solicitud ${action === 'accept' ? 'aceptada' : 'cancelada'} con éxito.`);
+        alert(`Solicitud ${action === 'accept' ? 'aceptada' : 'rechazada'} con éxito.`);
       } else {
         const error = await response.json();
-        alert(`Error al ${action === 'accept' ? 'aceptar' : 'cancelar'} la solicitud: ${error.message}`);
+        alert(`Error al ${action === 'accept' ? 'aceptar' : 'rechazar'} la solicitud: ${error.message}`);
       }
     } catch {
-      alert(`Error al ${action === 'accept' ? 'aceptar' : 'cancelar'} la solicitud.`);
+      alert(`Error al ${action === 'accept' ? 'aceptar' : 'rechazar'} la solicitud.`);
     }
   };
+  
 
   return (
     <div className="pageContainer">
@@ -153,11 +156,11 @@ export default function VendedorPage() {
                     >
                       Aceptar
                     </button>
-                    <button
+                    <button 
                       className="cancelButton"
-                      onClick={() => handleRequestAction(request.id, 'cancel')}
+                      onClick={() => handleRequestAction(request.id, 'reject')}
                     >
-                      Cancelar
+                      Rechazar
                     </button>
                   </div>
                 </div>
@@ -169,4 +172,3 @@ export default function VendedorPage() {
     </div>
   );
 }
-

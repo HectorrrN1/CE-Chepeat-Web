@@ -205,7 +205,7 @@ export default function DetalleProPage() {
         </form>
 
         {/* Botón para eliminar el producto */}
-        <h3>Eliminar Producto</h3>
+     
         <button onClick={handleDeleteProduct}>Eliminar Producto</button>
 
         {message && <p>{message}</p>}
