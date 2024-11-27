@@ -642,3 +642,63 @@
 .requestCard span.rejected {
   background-color: #dc3545;
 }
+
+
+/* Sección del historial */
+.historySection {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f9f9f9; /* Fondo claro */
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.historySection h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Grid para el historial */
+.historyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Tarjetas individuales del historial */
+.historyCard {
+  background-color: #fff; /* Fondo blanco */
+  border: 1px solid #ddd; /* Borde gris claro */
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.historyCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Títulos de producto en el historial */
+.historyCard h3 {
+  font-size: 1.25rem;
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+/* Información adicional */
+.historyCard p {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+/* Información de precios */
+.historyCard p:last-child {
+  font-weight: bold;
+  color: #000;
+}

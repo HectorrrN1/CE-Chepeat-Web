@@ -182,16 +182,18 @@ const ProductDetails = ({ params }) => {
       {/* Imagen del producto */}
       <div className={styles.imageContainer}>
         <img
-          src={product.imageUrl}
+          src={product.imagenUrl}
           alt={product.name}
           className={styles.productImage}
         />
         <button className={styles.closeButton} onClick={goToHome}>&times;</button>
+        <p></p>
       </div>
 
       {/* Información del producto */}
       <div className={styles.productDetails}>
         <span className={styles.badge}>Mejor vendido</span>
+        <p></p>
         <div className={styles.header}>
           <h2 className={styles.productTitle}>{product.name}:</h2>
           <p className={styles.productPrice}>${product.price}</p>
@@ -244,43 +246,16 @@ const ProductDetails = ({ params }) => {
       {showApprovalModal && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
-            <h1>Solicitud Aprobada</h1>
-            <p>Tu solicitud de compra ha sido enviada y aprobada por el vendedor. ¡Gracias por elegir Cheapeat!</p>
-            <button className={styles.button} onClick={handleFinish}>
-              Recibí el producto
+            <h1>Solicitud enviada</h1>
+            <p>Tu solicitud de compra ha sido enviada a el vendedor. ¡Gracias por elegir Cheapeat!</p>
+            <button onClick={handleReceipt} className={styles.button}>
+              Regresar al menú principal
             </button>
           </div>
         </div>
       )}
 
-      {/* Modal de calificación de compra */}
-      {showRatingModal && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <h1>Califique su experiencia de compra</h1>
-            <div className={styles.stars}>
-              {[...Array(5)].map((_, index) => (
-                <span
-                  key={index}
-                  onClick={() => handleStarClick(index + 1)}
-                  className={`${styles.star} ${index < calificacion ? styles.active : ""}`}
-                >
-                  ★
-                </span>
-              ))}
-            </div>
-            <textarea
-              className={styles.textarea}
-              placeholder="Escriba sus comentarios aquí..."
-              value={comentario}
-              onChange={(e) => setComentario(e.target.value)}
-            />
-            <button onClick={handleReceipt} className={styles.button}>
-              Finalizar Compra
-            </button>
-          </div>
-        </div>
-      )}
+   
     </div>
   );
 };

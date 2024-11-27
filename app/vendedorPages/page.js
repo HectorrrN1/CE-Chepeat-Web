@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -8,10 +9,16 @@ import Sidebar from './SidebarVen';
 export default function VendedorPage() {
   const [products, setProducts] = useState([]);
   const [requests, setRequests] = useState([]);
+  const [pendingSales, setPendingSales] = useState([]); // Estado para las ventas pendientes
+  const [selectedSale, setSelectedSale] = useState(null); // Estado para la venta seleccionada
+  const [wasDelivered, setWasDelivered] = useState(false);
+  const [wasPaid, setWasPaid] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [loadingRequests, setLoadingRequests] = useState(true);
+  const [loadingPendingSales, setLoadingPendingSales] = useState(true); // Estado de carga para ventas pendientes
   const [errorProducts, setErrorProducts] = useState(null);
   const [errorRequests, setErrorRequests] = useState(null);
+  const [errorPendingSales, setErrorPendingSales] = useState(null); // Error para ventas pendientes
   const router = useRouter();
 
   useEffect(() => {
@@ -21,8 +28,10 @@ export default function VendedorPage() {
     if (!storedToken || !storedIdSeller) {
       setErrorProducts('Credenciales no encontradas. Por favor, inicia sesión nuevamente.');
       setErrorRequests('Credenciales no encontradas. Por favor, inicia sesión nuevamente.');
+      setErrorPendingSales('Credenciales no encontradas. Por favor, inicia sesión nuevamente.');
       setLoadingProducts(false);
       setLoadingRequests(false);
+      setLoadingPendingSales(false);
       return;
     }
 
@@ -45,7 +54,43 @@ export default function VendedorPage() {
       }
       setLoadingRequests(false);
     });
-  }, []);
+
+   // Cargar ventas pendientes
+   fetchPendingSales(storedIdSeller, storedToken).then((result) => {
+    if (result.success) {
+      setPendingSales(result.data);
+    } else {
+      setErrorPendingSales(result.error || 'Error al cargar las ventas pendientes.');
+    }
+    setLoadingPendingSales(false);
+  });
+}, []);
+
+
+
+ // Función para obtener ventas pendientes
+ const fetchPendingSales = async (idSeller, token) => {
+  try {
+    const response = await fetch('https://backend-j959.onrender.com/api/Transaction/ViewBySeller', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(idSeller ),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return { success: true, data };
+    } else {
+      const error = await response.json();
+      return { success: false, error: error.message };
+    }
+  } catch (err) {
+    return { success: false, error: 'Error al cargar las ventas pendientes.' };
+  }
+};
 
   // Función para obtener solicitudes del vendedor
   const fetchRequestsBySeller = async (idSeller, token) => {
@@ -71,38 +116,78 @@ export default function VendedorPage() {
     }
   };
 
-  // Manejar Aceptar y Cancelar solicitud
-  const handleRequestAction = async (requestId, action) => {
-    const endpoint =
-      action === 'accept'
-        ? 'https://backend-j959.onrender.com/api/PurchaseRequest/AcceptRequest'
-        : 'https://backend-j959.onrender.com/api/PurchaseRequest/Reject';
-  
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        // Envía el ID como un string en el cuerpo
-        body: JSON.stringify(requestId),
-      });
-  
-      if (response.ok) {
-        // Filtra la solicitud cancelada de la lista
-        setRequests((prevRequests) => prevRequests.filter((request) => request.id !== requestId));
-        alert(`Solicitud ${action === 'accept' ? 'aceptada' : 'rechazada'} con éxito.`);
-      } else {
-        const error = await response.json();
-        alert(`Error al ${action === 'accept' ? 'aceptar' : 'rechazar'} la solicitud: ${error.message}`);
-      }
-    } catch {
-      alert(`Error al ${action === 'accept' ? 'aceptar' : 'rechazar'} la solicitud.`);
-    }
-  };
-  
+ // Manejar Aceptar y Cancelar solicitud
+const handleRequestAction = async (requestId, action) => {
+  const token = localStorage.getItem('token');
+  const endpoint =
+    action === 'accept'
+      ? 'https://backend-j959.onrender.com/api/Transaction/AddTransaction'
+      : 'https://backend-j959.onrender.com/api/PurchaseRequest/Reject';
 
+  try {
+    const body = JSON.stringify(
+      action === 'accept'
+        ? { idPurchaseRequest: requestId } // Estructura del endpoint para aceptar
+        : { id: requestId } // Estructura genérica para cancelar
+    );
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body,
+    });
+
+    if (response.ok) {
+      if (action === 'accept') {
+        alert('Solicitud aceptada y transacción registrada con éxito.');
+      } else {
+        alert('Solicitud rechazada con éxito.');
+      }
+
+      // Filtrar la solicitud procesada de la lista
+      setRequests((prevRequests) => prevRequests.filter((request) => request.id !== requestId));
+    } else {
+      const error = await response.json();
+      alert(`Error al ${action === 'accept' ? 'aceptar' : 'rechazar'} la solicitud: ${error.message}`);
+    }
+  } catch (err) {
+    alert(`Error al ${action === 'accept' ? 'aceptar' : 'rechazar'} la solicitud.`);
+  }
+};
+
+  
+const handleFinalizeSale = async () => {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await fetch('https://backend-j959.onrender.com/api/Transaction/CompleteTransaction', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        id: selectedSale.id,
+        wasDelivered,
+        wasPaid,
+      }),
+    });
+
+    if (response.ok) {
+      alert('Venta completada con éxito.');
+      setPendingSales((prevSales) => prevSales.filter((sale) => sale.id !== selectedSale.id));
+      setSelectedSale(null);
+      router.push('/vendedorPages');
+    } else {
+      const error = await response.json();
+      alert(`Error al completar la venta: ${error.message}`);
+    }
+  } catch (err) {
+    alert('Error al completar la venta.');
+  }
+};
   return (
     <div className="pageContainer">
       <Sidebar />
@@ -135,6 +220,78 @@ export default function VendedorPage() {
         <button className="addButton" onClick={() => router.push('/vendedorPages/aggProd/newPro')}>
           Agregar productos
         </button>
+
+{/* Sección de ventas pendientes */}
+<div className="pendingSalesSection">
+  <h2 className="sectionTitle">Ventas pendientes</h2>
+
+  {loadingPendingSales && <p>Cargando ventas pendientes...</p>}
+  {errorPendingSales && <p className="error">{errorPendingSales}</p>}
+  {!loadingPendingSales && !errorPendingSales && pendingSales.length === 0 && (
+    <p>No tienes ventas pendientes.</p>
+  )}
+  {!loadingPendingSales && !errorPendingSales && pendingSales.length > 0 && (
+    <div className="pendingSalesList">
+      {pendingSales.map((sale) => (
+        <div key={sale.id} className="saleItem"onClick={() => setSelectedSale(sale)}>
+          <div className="saleDetails">
+            <p>
+              <strong>Comprador:</strong> {sale.buyerName}
+            </p>
+            <p>
+              <strong>Producto:</strong> {sale.productName}
+            </p>
+        
+            <p>
+              <strong>Fecha:</strong> {new Date(sale.transactionDate).toLocaleDateString()} - {new Date(sale.transactionDate).toLocaleTimeString()}
+            </p>
+            <p className={`status ${sale.status.toLowerCase()}`}>
+              <strong>Estado:</strong> {sale.status}
+            </p>
+          </div>
+        </div>
+      ))}
+
+      
+{selectedSale && (
+  <div className="modal-overlay">
+    <div className="modal">
+      <h3>Detalle de la venta</h3>
+      <p>Comprador: {selectedSale.buyerName}</p>
+      <p>Producto: {selectedSale.productName}</p>
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={wasDelivered}
+            onChange={(e) => setWasDelivered(e.target.checked)}
+          />
+          Entregué el producto
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={wasPaid}
+            onChange={(e) => setWasPaid(e.target.checked)}
+          />
+          Acepto que el usuario pagó el monto acordado
+        </label>
+      </div>
+      <button onClick={handleFinalizeSale}>Finalizar venta</button>
+      <button onClick={() => setSelectedSale(null)}>Cancelar</button>
+    </div>
+  </div>
+)}
+
+      </div>
+ 
+
+
+    
+  )}
+</div>
+
+
 
         {/* Sección de solicitudes de productos */}
         <div className="requestSection">
