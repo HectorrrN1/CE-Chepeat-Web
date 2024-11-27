@@ -10,6 +10,9 @@ export default function VendedorPage() {
   const [products, setProducts] = useState([]);
   const [requests, setRequests] = useState([]);
   const [pendingSales, setPendingSales] = useState([]); // Estado para las ventas pendientes
+  const [selectedSale, setSelectedSale] = useState(null); // Estado para la venta seleccionada
+  const [wasDelivered, setWasDelivered] = useState(false);
+  const [wasPaid, setWasPaid] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [loadingRequests, setLoadingRequests] = useState(true);
   const [loadingPendingSales, setLoadingPendingSales] = useState(true); // Estado de carga para ventas pendientes
@@ -156,7 +159,35 @@ const handleRequestAction = async (requestId, action) => {
 };
 
   
+const handleFinalizeSale = async () => {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await fetch('https://backend-j959.onrender.com/api/Transaction/CompleteTransaction', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        id: selectedSale.id,
+        wasDelivered,
+        wasPaid,
+      }),
+    });
 
+    if (response.ok) {
+      alert('Venta completada con éxito.');
+      setPendingSales((prevSales) => prevSales.filter((sale) => sale.id !== selectedSale.id));
+      setSelectedSale(null);
+      router.push('/vendedorPages');
+    } else {
+      const error = await response.json();
+      alert(`Error al completar la venta: ${error.message}`);
+    }
+  } catch (err) {
+    alert('Error al completar la venta.');
+  }
+};
   return (
     <div className="pageContainer">
       <Sidebar />
@@ -202,7 +233,7 @@ const handleRequestAction = async (requestId, action) => {
   {!loadingPendingSales && !errorPendingSales && pendingSales.length > 0 && (
     <div className="pendingSalesList">
       {pendingSales.map((sale) => (
-        <div key={sale.id} className="saleItem">
+        <div key={sale.id} className="saleItem"onClick={() => setSelectedSale(sale)}>
           <div className="saleDetails">
             <p>
               <strong>Comprador:</strong> {sale.buyerName}
@@ -220,7 +251,43 @@ const handleRequestAction = async (requestId, action) => {
           </div>
         </div>
       ))}
+
+      
+{selectedSale && (
+  <div className="modal-overlay">
+    <div className="modal">
+      <h3>Detalle de la venta</h3>
+      <p>Comprador: {selectedSale.buyerName}</p>
+      <p>Producto: {selectedSale.productName}</p>
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={wasDelivered}
+            onChange={(e) => setWasDelivered(e.target.checked)}
+          />
+          Entregué el producto
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={wasPaid}
+            onChange={(e) => setWasPaid(e.target.checked)}
+          />
+          Acepto que el usuario pagó el monto acordado
+        </label>
+      </div>
+      <button onClick={handleFinalizeSale}>Finalizar venta</button>
+      <button onClick={() => setSelectedSale(null)}>Cancelar</button>
     </div>
+  </div>
+)}
+
+      </div>
+ 
+
+
+    
   )}
 </div>
 
