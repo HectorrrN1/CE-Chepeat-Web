@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -13,10 +14,17 @@ const Page = () => {
   const [showModal, setShowModal] = useState(true);
   const [products, setProducts] = useState([]); // Estado para los productos
   const [requests, setRequests] = useState([]); // Estado para las solicitudes
+  const [requestHistory, setRequestHistory] = useState([]); // Estado para el historial de solicitudes
   const [loading, setLoading] = useState(false); // Estado de carga para productos
   const [loadingRequests, setLoadingRequests] = useState(false); // Estado de carga para solicitudes
+  const [loadingHistory, setLoadingHistory] = useState(false); // Estado de carga para el historial
   const [error, setError] = useState(null); // Estado de error para productos
   const [errorRequests, setErrorRequests] = useState(null); // Estado de error para solicitudes
+  const [errorHistory, setErrorHistory] = useState(null); // Estado de error para el historial
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [calificacion, setCalificacion] = useState(0);
+  const [comentario, setComentario] = useState("");
   const router = useRouter();
 
   // Función para obtener productos
@@ -71,6 +79,77 @@ const Page = () => {
       setLoadingRequests(false);
     }
   };
+
+   // Función para obtener historial de solicitudes
+   const fetchRequestHistory = async () => {
+    setLoadingHistory(true);
+    setErrorHistory(null);
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    try {
+      const response = await fetch("https://backend-j959.onrender.com/api/Transaction/ViewByBuyer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(userId),
+      });
+
+      if (!response.ok) throw new Error("Error al obtener historial.");
+      const data = await response.json();
+      setRequestHistory(data);
+    } catch (error) {
+      setErrorHistory("No se pudo cargar el historial.");
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRequests();
+    fetchRequestHistory(); // Obtener historial al cargar la página
+  }, []);
+
+// Abrir modal con la transacción seleccionada
+const handleCommentClick = (transactionId) => {
+  setSelectedTransaction(transactionId);
+  setShowRatingModal(true);
+};
+
+// Enviar comentario y calificación
+const handleSendComment = async () => {
+  const token = localStorage.getItem("token");
+
+  const payload = {
+    idTransaction: selectedTransaction,
+    message: comentario,
+    rating: calificacion,
+  };
+
+  try {
+    const response = await fetch("https://backend-j959.onrender.com/api/Comment/AddComment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) throw new Error("Error al enviar el comentario.");
+
+    alert("¡Comentario enviado con éxito!");
+    setShowRatingModal(false);
+    setCalificacion(0);
+    setComentario("");
+  } catch (error) {
+    alert("No se pudo enviar el comentario.");
+  }
+};
+
+
 
   // Manejar permiso de ubicación
   const handleLocationPermission = () => {
@@ -175,9 +254,71 @@ const Page = () => {
   )}
 </div>
 
+<div className={styles.historySection}>
+<h2>Historial de solicitudes</h2>
+            {loadingHistory ? (
+              <p>Cargando historial...</p>
+            ) : errorHistory ? (
+              <p>{errorHistory}</p>
+            ) : requestHistory.length > 0 ? (
+              <div className={styles.historyGrid}>
+                {requestHistory.map((history) => (
+                  <div key={history.id} className={styles.historyCard}>
+                    <h3>{history.productName}</h3>
+                    <p>Fecha: {new Date(history.transactionDate).toLocaleDateString()}</p>
+                    <p>Total: ${history.totalAmount}</p>
+                    <button
+                      className={styles.button}
+                      onClick={() => handleCommentClick(history.id)}
+                    >
+                      Deja un comentario
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No tienes historial de solicitudes.</p>
+            )}
+          </div>
+
+          {/* Modal de calificación */}
+          {showRatingModal && (
+            <div className={styles.modal}>
+              <div className={styles.modalContent}>
+                <h1>Califique su experiencia de compra</h1>
+                <div className={styles.stars}>
+                  {[...Array(5)].map((_, index) => (
+                    <span
+                      key={index}
+                      onClick={() => setCalificacion(index + 1)}
+                      className={`${styles.star} ${index < calificacion ? styles.active : ""}`}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+                <textarea
+                  className={styles.textarea}
+                  placeholder="Escriba sus comentarios aquí..."
+                  value={comentario}
+                  onChange={(e) => setComentario(e.target.value)}
+                />
+                <button onClick={handleSendComment} className={styles.button}>
+                  Enviar comentario
+                </button>
+                <button onClick={() => setShowRatingModal(false)} className={styles.cancelButton}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+            )}
+          </div>
+
+
+
         </div>
       </div>
-    </div>
+    
   );
 };
 
