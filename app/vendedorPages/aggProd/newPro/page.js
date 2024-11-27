@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'; // Para redirigir
+import axios from 'axios';
 import './newPro.css';
 
 export default function NewPro() {
   const [image, setImage] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
+  const [imageFile, setImageFile] = useState(null); // Archivo real de la imagen
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
@@ -14,8 +15,7 @@ export default function NewPro() {
   const [description, setDescription] = useState('');
   const [idSeller, setIdSeller] = useState('');
   const [token, setToken] = useState('');
-  const [products, setProducts] = useState([]);
-  const router = useRouter();
+  const router = useRouter(); // Para redirigir
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -24,6 +24,7 @@ export default function NewPro() {
     if (storedToken && storedIdSeller) {
       setToken(storedToken);
       setIdSeller(storedIdSeller);
+      console.log('Token e idSeller obtenidos:', storedToken, storedIdSeller);
     } else {
       console.error('Token o idSeller no disponibles en localStorage.');
     }
@@ -31,114 +32,91 @@ export default function NewPro() {
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-    setImage(URL.createObjectURL(file));
-    setImageFile(file); // Guardar el archivo de imagen para enviarlo al endpoint
+    setImage(URL.createObjectURL(file)); // Vista previa
+    setImageFile(file); // Guardar archivo real para envío
   };
 
-  const uploadImageToFirebase = async () => {
-    if (!imageFile || !name) {
-      alert('Por favor, selecciona una imagen y asigna un nombre al producto.');
-      return null;
-    }
-
-
-    
-    const formData = new FormData();
-    formData.append('Image', imageFile);
-    formData.append('ImageId', name);
-
-    try {
-      const response = await fetch(
-        'https://images-o944.onrender.com/api/Image/UploadImage',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok && data.numError === 0) {
-        console.log('Imagen subida con éxito:', data.path);
-        return data.path; // Retornar el enlace de la imagen
-      } else {
-        console.error('Error al subir la imagen:', data.message);
-        alert('Error al subir la imagen. Por favor, inténtalo de nuevo.');
-        return null;
-      }
-    } catch (error) {
-      console.error('Error al subir la imagen:', error);
-      alert('Hubo un error al intentar subir la imagen.');
-      return null;
-    }
-  };
-
-  const handleSubmit = async (event) => {
+  const handleUploadAndSave = async (event) => {
     event.preventDefault();
 
     if (!idSeller) {
-      console.error('idSeller no disponible');
       alert('No se puede agregar el producto. Por favor, verifica tu sesión.');
       return;
     }
 
-    const imagePath = await uploadImageToFirebase(); // Subir la imagen y obtener su path
-    if (!imagePath) return;
-
-    const productData = {
-      name,
-      price,
-      stock,
-      measure,
-      description,
-      idSeller,
-      imagePath, // Agregar el path de la imagen al modelo
-    };
+    if (!imageFile) {
+      alert('Por favor selecciona una imagen.');
+      return;
+    }
 
     try {
-      console.log('Datos del producto a enviar:', productData);
+      // Crear formData para subir la imagen
+      const formData = new FormData();
+      formData.append('Image', imageFile);
+      formData.append('ImageId', `product_${Date.now()}`); // ID único para la imagen
 
-      const response = await fetch(
-        'https://backend-j959.onrender.com/api/Product/AddProduct',
+      const uploadResponse = await axios.post(
+        'https://images-o944.onrender.com/api/Image/UploadImage',
+        formData,
         {
-          method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
           },
-          body: JSON.stringify(productData),
         }
       );
 
-      if (response.ok) {
-        console.log('Producto agregado exitosamente');
-        alert('Producto agregado exitosamente.');
-        setProducts((prevProducts) => [...prevProducts, productData]);
-        setName('');
-        setPrice('');
-        setStock('');
-        setMeasure('');
-        setDescription('');
-        setImage(null);
-        setImageFile(null);
+      if (uploadResponse.status !== 200) {
+        throw new Error('Error al subir la imagen.');
+      }
+
+      const imagenUrl = uploadResponse.data.path;
+      console.log('URL de la imagen:', imagenUrl);
+
+      // Validar campos del producto
+      if (!name || !price || !stock || !measure || !description) {
+        alert('Por favor completa todos los campos.');
+        return;
+      }
+
+      // Crear objeto del producto
+      const productData = {
+        name,
+        description,
+        price: parseFloat(price),
+        stock: parseInt(stock),
+        measure,
+        idSeller,
+        imagenUrl, // Usar la URL de la imagen
+      };
+
+      const productResponse = await axios.post(
+        'https://backend-j959.onrender.com/api/Product/AddProduct',
+        productData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (productResponse.status === 200) {
+        alert('Producto agregado con éxito.');
+        router.push('/vendedorPages'); // Redirigir a otra página
       } else {
-        console.error('Error al agregar el producto');
-        alert('Hubo un error al agregar el producto. Por favor, inténtalo de nuevo.');
+        throw new Error('Error al guardar el producto.');
       }
     } catch (error) {
-      console.error('Error al enviar la solicitud:', error);
-      alert('Ocurrió un error al agregar el producto.');
+      console.error('Error:', error);
+      alert('Hubo un problema al subir la imagen o guardar el producto.');
     }
-  };
-
-  const goToMyProducts = () => {
-    router.push('/vendedorPages');
   };
 
   return (
     <div className="newProductContainer">
       <h1>Agregar producto</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleUploadAndSave}>
         <label htmlFor="image" className="imageButton">
           Seleccionar imagen del producto
         </label>
@@ -203,10 +181,6 @@ export default function NewPro() {
         />
 
         <button type="submit">Agregar producto</button>
-
-        <button className="myProductsButton" onClick={goToMyProducts}>
-          Mis productos
-        </button>
       </form>
     </div>
   );

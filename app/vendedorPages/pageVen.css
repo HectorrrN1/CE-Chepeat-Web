@@ -88,37 +88,6 @@
 }
 
 
-/* Botón para aceptar solicitud */
-.cancelButton {
-  padding: 12px 20px;
-  font-size: 16px;
-  background-color: #df1c24;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 30px;
-  transition: background-color 0.3s;
-
- 
- 
-}
-
-/* Botón para aceptar solicitud */
-.acceptButton {
-  padding: 12px 20px;
-  font-size: 16px;
-  background-color: #2cdf44;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-
-  transition: background-color 0.3s;
- 
- 
-}
-
 
 
 
@@ -221,3 +190,145 @@
 
 
 
+/* General container for pending sales and requests */
+.sectionContainer {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Pending sales and requests lists */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.listItem:hover {
+  background-color: #f1f1f1;
+}
+
+/* Information display */
+.itemInfo {
+  flex: 1;
+  font-size: 1rem;
+  color: #555;
+}
+
+.timestamp {
+  font-size: 0.9rem;
+  color: #999;
+}
+
+/* Buttons */
+.actionButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.actionButton {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.acceptButton {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.acceptButton:hover {
+  background-color: #45a049;
+}
+
+.cancelButton {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.cancelButton:hover {
+  background-color: #e53935;
+}
+
+/* Add spacing for better layout */
+.sectionSpacing {
+  margin-top: 20px;
+}
+
+
+.pendingSalesSection {
+  margin-top: 20px;
+}
+
+.pendingSalesList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.saleItem {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.saleDetails p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.saleDetails p strong {
+  color: #555;
+}
+
+.status {
+  margin-top: 10px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.status.pending {
+  background-color: #ffecb3;
+  color: #a67c00;
+}
+
+.status.completed {
+  background-color: #c8e6c9;
+  color: #256029;
+}
+
+.status.cancelled {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
