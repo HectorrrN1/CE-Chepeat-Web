@@ -75,10 +75,9 @@
 .pageContainer {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
+  min-height: 100vh;
 }
+
 
 .mapSection {
   width: 100%;
@@ -237,34 +236,33 @@
 
 
 
-
 .pageContainer {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-.mainLayout {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-}
+
 
 .sidebar {
-  width: 250px;
-  background-color: #001529;
-  color: white;
-  height: 100vh; /* Hace que el sidebar ocupe toda la altura de la página */
-  position: fixed;
+  width: 250px; /* Ancho fijo */
+  height: 100vh; /* Toda la altura de la pantalla */
+  position: fixed; /* Fijar posición */
   top: 0;
-  left: 0;
- 
+  left: 0; /* Siempre en el borde izquierdo */
+  background-color: #001529; /* Color de fondo */
+  color: white; /* Color del texto */
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra */
+  z-index: 1000; /* Para que se muestre encima del contenido */
 }
 
 .content {
-  margin-left: 250px; /* Deja espacio para el sidebar */
-  padding: 20px;
-  flex-grow: 1;
+  margin-left: 250px; /* Dejar espacio para el sidebar */
+  padding: 20px; /* Espaciado interno */
+  flex-grow: 1; /* Ocupar el resto del espacio */
 }
 
 .mapSection {
@@ -296,6 +294,7 @@
 /* Estructura de layout principal */
 .mainLayout {
   display: flex;
+  flex-grow: 1;
 }
 
 /* Sidebar */
@@ -332,17 +331,6 @@
 
 
 
-/* page.module.css carrusel  */
-.carouselSection {
-  margin-top: 40px;
-}
-
-.carouselSection h2 {
-  font-size: 28px;
-  color: #333;
-  text-align: center;
-  margin-bottom: 20px;
-}
 
 
 

@@ -45,14 +45,8 @@ const Sidebar = () => {
         <h3 className={styles.username}>{username}</h3>
       </div>
       <ul className={styles.menuItems}>
-        <li className={styles.menuItem}>
-          <InfoCircleOutlined className={styles.icon} />
-          {isOpen && <span>Mi Información</span>}
-        </li>
-        <li className={styles.menuItem}>
-          <EditOutlined className={styles.icon} />
-          {isOpen && <span>Editar Perfil</span>}
-        </li>
+   
+  
         <li className={styles.menuItem} onClick={goToVendedorRegister}>
           <ShopOutlined className={styles.icon} />
           {isOpen && <span>Modo Vendedor</span>}

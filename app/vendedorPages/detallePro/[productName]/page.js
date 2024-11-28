@@ -204,14 +204,14 @@ export default function DetalleProPage() {
           </button>
 
 
-            {/* Botón para eliminar el producto */}
-     
-        <button onClick={handleDeleteProduct}>Eliminar Producto</button>
-        {message && <p>{message}</p>}
         </form>
 
       
 
+            {/* Botón para eliminar el producto */}
+     
+            <button onClick={handleDeleteProduct}>Eliminar Producto</button>
+        {message && <p>{message}</p>}
        
       </div>
     </div>

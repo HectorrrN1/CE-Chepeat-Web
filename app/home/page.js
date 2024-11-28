@@ -172,7 +172,10 @@ const handleSendComment = async () => {
   }, []);
 
   return (
+    
+    
     <div className={styles.pageContainer}>
+      
       {showModal && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
@@ -194,13 +197,14 @@ const handleSendComment = async () => {
       )}
 
       <div className={styles.mainLayout}>
-        <Sidebar />
+      <Sidebar />
         <div className={styles.content}>
           <div className={styles.mapSection}>
             <RealTimeMap />
           </div>
 
           <div className={styles.discountSection}>
+            
             <div className={styles.discountBanner}>
               <h2>A 50% de descuento</h2>
               <p>(Todos los productos de panadería después de las 9 PM todos los días)</p>
@@ -255,7 +259,7 @@ const handleSendComment = async () => {
 </div>
 
 <div className={styles.historySection}>
-<h2>Historial de solicitudes</h2>
+<h2>Historial de compras</h2>
             {loadingHistory ? (
               <p>Cargando historial...</p>
             ) : errorHistory ? (
