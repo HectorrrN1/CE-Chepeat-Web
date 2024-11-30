@@ -203,7 +203,7 @@ const handleSendComment = async () => {
           <div className={styles.discountSection}>
             <div className={styles.discountBanner}>
               <h2>A 50% de descuento</h2>
-              <p>(Todos los productos de panadería después de las 9 PM todos los días)</p>
+              <p>(Todos los productos de panadería después de las 9 PM todos los días, ¡Compra ya!)</p>
             </div>
           </div>
 
